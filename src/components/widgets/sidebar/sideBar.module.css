@@ -1,0 +1,12 @@
+.Sidebar{
+    background: gray;
+    height: calc(100vh - 60px);
+}
+
+.Sidebar .blockLink{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+    height: calc(100% - 10px);
+}

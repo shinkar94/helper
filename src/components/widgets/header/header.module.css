@@ -1,0 +1,30 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+    background: linear-gradient(0deg,black, gray);
+    box-shadow: 0 1px 10px 1px var(--gl-color);
+}
+
+
+.logoUser{
+    display: flex;
+    gap: 4px;
+    max-width: 200px;
+}
+.logoUser img{
+    border-radius: 50%;
+}
+.logoUser .textInfo{
+
+}
+.logoUser .textInfo h4{
+    margin: 0;
+
+}
+.logoUser .textInfo p{
+    margin: 0;
+
+}

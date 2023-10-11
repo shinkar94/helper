@@ -1,0 +1,7 @@
+.homeWrapper{
+
+}
+
+.homeWrapper .contentWrapper{
+    display: flex;
+}
