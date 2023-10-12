@@ -13,7 +13,7 @@ export const HomeContent = () =>{
     const router = useRouter();
     useEffect(() => {
         if (!initialization) {
-            router.push('/Page/user/signUp');
+            router.push('/Page/user/signIn');
         }
     }, [initialization]);
     useEffect(() => {
