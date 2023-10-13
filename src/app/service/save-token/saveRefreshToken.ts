@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
-import Token from "@/models/token-model";
+
 import mongoose from "mongoose";
+import Token from "@/app/models/token-model";
 
 
 export const SaveRefreshToken = async (id: string, refreshToken: string | undefined) => {
