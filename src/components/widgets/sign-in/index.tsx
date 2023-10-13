@@ -1,71 +1,65 @@
 'use client'
-import useSWR from "swr";
-import {getUserData} from "@/app/api/api-query/getUserData";
+import React, {useEffect} from "react";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {signInSchema, TypeSignInSchema, UserResponseType} from "@/lib/types";
+import useAuthStore from "@/app/store/authStore/authStore";
+import {PayloadType} from "@/app/service/generate-token/generateToken";
+import {useRouter} from "next/navigation";
+
 
 export const SignIn = () =>{
-    // const { data, isLoading, error } = useSWR("/api", getUserData);
+    const {toggleUser, toggleInitial, initialization} = useAuthStore()
+
+    const router = useRouter();
+    useEffect(() => {
+        if (initialization) {
+            router.push('/');
+        }
+    }, [initialization]);
+    const {
+        register,
+        handleSubmit,
+        formState: {errors, isSubmitting},
+        reset
+    } = useForm<TypeSignInSchema>({resolver: zodResolver(signInSchema)})
+
+    const onSubmit = async (dataForm: TypeSignInSchema) => {
+        try {
+            const response = await fetch("http://localhost:3000/api/auth/login", {
+                method: "POST",
+                body: JSON.stringify(dataForm),
+                headers: { "Content-Type": "application/json" },
+            });
+            const data:UserResponseType = await response.json();
+            const {_id,email,avatarUrl,fullName} = data
+            const user:PayloadType = {id: _id, email, avatarUrl, fullName}
+            toggleUser(user)
+            toggleInitial(true)
+            reset();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     return(
         <>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <h3>SignIn</h3>
-                <input type={'text'} placeholder={'Email'}/>
-                <input type={'text'} placeholder={'Password'}/>
-                <button type={'submit'}>send</button>
+                {errors.email && (<p>{`${errors.email.message}`}</p>)}
+                {errors.password && (<p>{`${errors.password.message}`}</p>)}
+                <input type={'email'}
+                       {...register('email', {
+                           required: "Email is required"
+                       })}
+                       placeholder={'Email'}/>
+                <input type={'password'}
+                       {...register('password')}
+                       placeholder={'Password'}/>
+                {/*<input type={'text'} onChange={(e)=>{setConfirmPassword(e.currentTarget.value)}} value={confirmPassword} placeholder={'confirmPassword'}/>*/}
+                <button type={'submit'} disabled={isSubmitting}>send</button>
             </form>
         </>
     )
 }
-// "zod": "^3.21.4"
-// "react-hook-form": "^7.45.4",
-
-
-// 'use client'
-// import {z} from 'zod';
-// import {useForm} from "react-hook-form";
-// import {zodResolver} from "@hookform/resolvers/zod";
-// import {useLoginMutation} from "@/app/api-query/api-query";
-// import {authAction} from "@/reducer/auth.slice";
-// import {useAppDispatch, useAppSelector} from "@/hok/hoks";
-// import {authSelectors} from "@/selectors/Selectors";
-// import Image from "next/image";
-// import {S} from '@/components/user/signIn/siginInStyle'
-//
-// const signInSchema = z.object({
-//     email: z.string().email(),
-//     password: z.string().min(3)
-// });
-// type SignInFormShem = z.infer<typeof signInSchema>
-// export const SignInPage = () => {
-//     const dispatch = useAppDispatch()
-//     const userData = useAppSelector(authSelectors)
-//     const {getUser} = authAction
-//     const [login] = useLoginMutation()
-//     const onSubmit = async (values: SignInFormShem) => {
-//         try {
-//             const response = await login(values)
-//             if ('data' in response) {
-//                 const {email, avatarUrl, fullName, token, _id} = response.data
-//                 dispatch(getUser({email, avatarUrl, fullName, token, id: _id}))
-//             }
-//         } catch (e) {
-//             console.log(e)
-//         }
-//
-//     }
-//
-//     const {register, handleSubmit} = useForm<SignInFormShem>({resolver: zodResolver(signInSchema)})
-//     const handleSubmitForm = handleSubmit(onSubmit)
-//     return (
-//         <S.SignInBlock>
-//             <form onSubmit={handleSubmitForm}>
-//                 {userData.avatarUrl && <Image src={userData.avatarUrl} alt={'avatar'} width="60" height="60"/>}
-//                 {userData.avatarUrl && <span>{userData.fullName}</span>}
-//                 <h3>SignIn</h3>
-//                 <input {...register('email')} type={'email'} placeholder={'Login...'}/>
-//                 <input {...register('password')} type={'password'} placeholder={'Password...'}/>
-//                 <button>send</button>
-//             </form>
-//         </S.SignInBlock>
-//     )
-// }
