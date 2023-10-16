@@ -1,5 +1,7 @@
+import {HomePage, SignUp} from "@/components";
+
 export default function signUp(){
     return(
-        <>SignUp </>
+        <HomePage><SignUp /></HomePage>
     )
 }

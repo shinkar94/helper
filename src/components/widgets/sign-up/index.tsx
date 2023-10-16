@@ -2,17 +2,18 @@
 import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {signInSchema, TypeSignInSchema, UserResponseType} from "@/lib/types";
+import {signUpSchema, TypeSignUpSchema, UserResponseType} from "@/lib/types";
 import useAuthStore from "@/app/store/authStore/authStore";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {useRouter} from "next/navigation";
 
 
-export const SignIn = () =>{
+export const SignUp = () =>{
     const {toggleUser, toggleInitial, initialization} = useAuthStore()
 
     const router = useRouter();
     useEffect(() => {
+        console.log("refresh", initialization)
         if (initialization) {
             router.push('/');
         }
@@ -22,11 +23,11 @@ export const SignIn = () =>{
         handleSubmit,
         formState: {errors, isSubmitting},
         reset
-    } = useForm<TypeSignInSchema>({resolver: zodResolver(signInSchema)})
+    } = useForm<TypeSignUpSchema>({resolver: zodResolver(signUpSchema)})
 
-    const onSubmit = async (dataForm: TypeSignInSchema) => {
+    const onSubmit = async (dataForm: TypeSignUpSchema) => {
         try {
-            const response = await fetch("http://localhost:3000/api/auth/login", {
+            const response = await fetch("http://localhost:3000/api/auth/register", {
                 method: "POST",
                 body: JSON.stringify(dataForm),
                 headers: { "Content-Type": "application/json" },
@@ -49,6 +50,11 @@ export const SignIn = () =>{
                 <h3>SignIn</h3>
                 {errors.email && (<p>{`${errors.email.message}`}</p>)}
                 {errors.password && (<p>{`${errors.password.message}`}</p>)}
+                {errors.confirmPassword && (<p>{`${errors.confirmPassword.message}`}</p>)}
+                {errors.fullName && (<p>{`${errors.fullName.message}`}</p>)}
+                <input type={'text'}
+                       {...register('fullName')}
+                       placeholder={'fullName'}/>
                 <input type={'email'}
                        {...register('email', {
                            required: "Email is required"
@@ -57,6 +63,9 @@ export const SignIn = () =>{
                 <input type={'password'}
                        {...register('password')}
                        placeholder={'Password'}/>
+                <input type={'password'}
+                       {...register('confirmPassword')}
+                       placeholder={'confirmPassword'}/>
                 <button type={'submit'} disabled={isSubmitting}>send</button>
             </form>
         </>
