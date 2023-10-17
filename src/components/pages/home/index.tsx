@@ -1,4 +1,4 @@
-import {Header, HomeContent, Sidebar} from "@/components/widgets";
+import {BottomLine, Header, HomeContent, Sidebar} from "@/components/widgets";
 import s from './home.module.css'
 import {FC, ReactNode} from "react";
 
@@ -15,6 +15,7 @@ export const HomePage:FC<PropsType> = ({children}) =>{
                     {children}
                 </div>
             </div>
+            <BottomLine />
         </div>
     )
 }
