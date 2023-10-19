@@ -17,6 +17,9 @@
 .logoUser img{
     border-radius: 50%;
 }
+.logoUser svg{
+    max-width: 35px;
+}
 .logoUser .textInfo{
 
 }

@@ -1,17 +1,19 @@
 import {create} from "zustand";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
+import {immer} from "zustand/middleware/immer";
 
-
-type StoreType = {
-    toggleInitial: (status: boolean)=>void
-    toggleUser: (payload: PayloadType)=>void
+interface ManagersStoreState {
     initialization: boolean,
     user: PayloadType
 }
+interface ManagersStoreActions {
+    toggleInitial: (status: boolean)=>void
+    toggleUser: (payload: PayloadType)=>void
+}
 
 
-const useAuthStore = create<StoreType>(
-    (set)=>({
+export const useAuthStore = create(
+    immer<ManagersStoreState & ManagersStoreActions>((set)=>({
         initialization: false,
         user: {
             id: '',
@@ -30,6 +32,6 @@ const useAuthStore = create<StoreType>(
            }})
        }
     })
-)
+))
 
-export default useAuthStore
+export const { toggleInitial, toggleUser } = useAuthStore.getState()

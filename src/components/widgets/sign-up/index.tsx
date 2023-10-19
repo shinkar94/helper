@@ -3,13 +3,15 @@ import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signUpSchema, TypeSignUpSchema, UserResponseType} from "@/lib/types";
-import useAuthStore from "@/app/store/authStore/authStore";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
+import {useAuthStore} from "@/app/store";
+import {toggleInitial, toggleUser} from "@/app/store/authStore";
 
 
 export const SignUp = () =>{
-    const {toggleUser, toggleInitial, initialization} = useAuthStore()
+    const initialization = useAuthStore((state) => state.initialization)
 
     const router = useRouter();
     useEffect(() => {
@@ -17,7 +19,7 @@ export const SignUp = () =>{
         if (initialization) {
             router.push('/');
         }
-    }, [initialization]);
+    }, []);
     const {
         register,
         handleSubmit,
@@ -68,6 +70,7 @@ export const SignUp = () =>{
                        placeholder={'confirmPassword'}/>
                 <button type={'submit'} disabled={isSubmitting}>send</button>
             </form>
+            <Link href={'/Page/user//signIn'}>Sign In</Link>
         </>
     )
 }
