@@ -9,6 +9,7 @@ interface ManagersStoreState {
 interface ManagersStoreActions {
     toggleInitial: (status: boolean)=>void
     toggleUser: (payload: PayloadType)=>void
+    removeUser: () => void
 }
 
 
@@ -24,14 +25,28 @@ export const useAuthStore = create(
        toggleInitial: (status: boolean) =>
            set({ initialization: status }),
        toggleUser: (payload: PayloadType)=>{
-           set({user: {
-               id: payload.id,
+           set((state)=>{
+               state.user = {
+                   id: payload.id,
                    email: payload.email,
                    fullName: payload.fullName,
                    avatarUrl: payload.avatarUrl
-           }})
+               }
+               state.initialization = true
+           })
+       },
+       removeUser: () =>{
+            set((state)=>{
+                state.user = {
+                    id: '',
+                    email: '',
+                    fullName: '',
+                    avatarUrl: ''
+                }
+                state.initialization = false
+            })
        }
     })
 ))
 
-export const { toggleInitial, toggleUser } = useAuthStore.getState()
+export const { toggleInitial, toggleUser, removeUser } = useAuthStore.getState()

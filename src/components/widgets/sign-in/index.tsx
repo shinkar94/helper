@@ -7,7 +7,7 @@ import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {useAuthStore} from "@/app/store";
-import {toggleInitial, toggleUser} from "@/app/store/authStore";
+import {toggleUser} from "@/app/store/authStore";
 
 
 export const SignIn = () =>{
@@ -28,7 +28,7 @@ export const SignIn = () =>{
 
     const onSubmit = async (dataForm: TypeSignInSchema) => {
         try {
-            const response = await fetch("http://localhost:3000/api/auth/login", {
+            const response = await fetch("/api/auth/login", {
                 method: "POST",
                 body: JSON.stringify(dataForm),
                 headers: { "Content-Type": "application/json" },
@@ -37,7 +37,6 @@ export const SignIn = () =>{
             const {_id,email,avatarUrl,fullName} = data
             const user:PayloadType = {id: _id, email, avatarUrl, fullName}
             toggleUser(user)
-            toggleInitial(true)
             reset();
         } catch (error) {
             console.log(error);

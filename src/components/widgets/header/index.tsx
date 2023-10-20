@@ -6,6 +6,7 @@ import {UserDefault} from "@/components/shared";
 import {useAuthStore} from "@/app/store";
 export const Header = () =>{
     const user = useAuthStore((state) => state.user)
+    const initialization = useAuthStore((state) => state.initialization)
     let email = '';
     let fulName = '';
     if(user?.fullName){
@@ -35,9 +36,11 @@ export const Header = () =>{
                 Helper
             </div>
             <div className="btnPanel">
-                <Link href={'/Page/user/signIn'} >LogIn</Link>
+                <Link href={''} >SignUp</Link>
                 |
-                <Link href={''} >LogOut</Link>
+                {initialization
+                    ? <Link href={'/Page/user/logOut'} >logOut</Link>
+                    : <Link href={'/Page/user/signIn'} >SignIn</Link>}
             </div>
         </header>
     )
