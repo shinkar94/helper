@@ -27,9 +27,9 @@ export async function POST(req: Request):Promise<NextResponse<ResponseUserType |
         return NextResponse.json({message: 'this email not found!!'})
     }
     const isValidPass = await bcrypt.compare(password, user._doc.passwordHash)
-    if (!isValidPass) {
-        return NextResponse.json({message: 'invalid login or password'})
-    }
+    // if (!isValidPass) {
+    //     return NextResponse.json({message: 'invalid login or password'})
+    // }
 
     const userDto = userDTO(user)
     const tokens = generateToken(userDto)

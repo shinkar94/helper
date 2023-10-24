@@ -4,6 +4,7 @@ import Image from "next/image";
 import s from './header.module.css'
 import {UserDefault} from "@/components/shared";
 import {useAuthStore} from "@/app/store";
+
 export const Header = () =>{
     const user = useAuthStore((state) => state.user)
     const initialization = useAuthStore((state) => state.initialization)
@@ -33,7 +34,7 @@ export const Header = () =>{
                 </div>
             </div>
             <div className="title">
-                Helper
+                <Link href={'/'} >Helper</Link>
             </div>
             <div className="btnPanel">
                 <Link href={''} >SignUp</Link>

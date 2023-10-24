@@ -9,7 +9,6 @@ export const HomeContent = () =>{
     const user = useAuthStore((state)=> state.user)
     const { data, isLoading, error } = useSWR("/api", getUserData);
     const router = useRouter();
-
     useEffect(() => {
         if(data != undefined){
             if(data.error){

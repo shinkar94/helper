@@ -19,7 +19,7 @@ export const SignUp = () =>{
         if (initialization) {
             router.push('/');
         }
-    }, []);
+    }, [initialization]);
     const {
         register,
         handleSubmit,
@@ -29,7 +29,7 @@ export const SignUp = () =>{
 
     const onSubmit = async (dataForm: TypeSignUpSchema) => {
         try {
-            const response = await fetch("http://localhost:3000/api/auth/register", {
+            const response = await fetch("/api/auth/register", {
                 method: "POST",
                 body: JSON.stringify(dataForm),
                 headers: { "Content-Type": "application/json" },
@@ -49,7 +49,7 @@ export const SignUp = () =>{
     return(
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <h3>SignIn</h3>
+                <h3>SignUp</h3>
                 {errors.email && (<p>{`${errors.email.message}`}</p>)}
                 {errors.password && (<p>{`${errors.password.message}`}</p>)}
                 {errors.confirmPassword && (<p>{`${errors.confirmPassword.message}`}</p>)}

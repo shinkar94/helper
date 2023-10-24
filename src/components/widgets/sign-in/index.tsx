@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signInSchema, TypeSignInSchema, UserResponseType} from "@/lib/types";
@@ -12,13 +12,15 @@ import {toggleUser} from "@/app/store/authStore";
 
 export const SignIn = () =>{
     const initialization = useAuthStore((state) => state.initialization)
+    const [infoStatus, setInfoStatus] = useState('')
+    console.log("initialization",initialization)
 
     const router = useRouter();
     useEffect(() => {
         if (initialization) {
             router.push('/');
         }
-    }, []);
+    }, [initialization]);
     const {
         register,
         handleSubmit,
