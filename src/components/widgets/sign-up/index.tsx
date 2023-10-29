@@ -11,15 +11,15 @@ import {toggleInitial, toggleUser} from "@/app/store/authStore";
 
 
 export const SignUp = () =>{
-    const initialization = useAuthStore((state) => state.initialization)
-
-    const router = useRouter();
-    useEffect(() => {
-        console.log("refresh", initialization)
-        if (initialization) {
-            router.push('/');
-        }
-    }, [initialization]);
+    // const initialization = useAuthStore((state) => state.initialization)
+    //
+    // const router = useRouter();
+    // useEffect(() => {
+    //     console.log("refresh", initialization)
+    //     if (initialization) {
+    //         router.push('/');
+    //     }
+    // }, [initialization]);
     const {
         register,
         handleSubmit,
@@ -70,7 +70,7 @@ export const SignUp = () =>{
                        placeholder={'confirmPassword'}/>
                 <button type={'submit'} disabled={isSubmitting}>send</button>
             </form>
-            <Link href={'/Page/user//signIn'}>Sign In</Link>
+            <Link href={'/Page/user/signIn'}>Sign In</Link>
         </>
     )
 }

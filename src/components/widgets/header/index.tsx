@@ -40,7 +40,7 @@ export const Header = () =>{
                 <Link href={''} >SignUp</Link>
                 |
                 {initialization
-                    ? <Link href={'/Page/user/logOut'} >logOut</Link>
+                    ? <Link href={'/Page/user/log-out'} >logOut</Link>
                     : <Link href={'/Page/user/signIn'} >SignIn</Link>}
             </div>
         </header>
