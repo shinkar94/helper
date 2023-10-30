@@ -4,6 +4,7 @@ import Image from "next/image";
 import s from './header.module.css'
 import {UserDefault} from "@/components/shared";
 import {useAuthStore} from "@/app/store";
+import {removeUser} from "@/app/store/authStore";
 
 export const Header = () => {
     const user = useAuthStore((state) => state.user)
@@ -25,6 +26,21 @@ export const Header = () => {
         return queryStr;
     }
 
+    const logOut = async () => {
+        try {
+            const response = await fetch("/api/auth/logout", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+            if(response.status){
+                removeUser()
+            }
+            console.log(response)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <header className={s.header}>
             <div className={s.logoUser}>
@@ -39,7 +55,7 @@ export const Header = () => {
             </div>
             <div className="btnPanel">
                 {initialization
-                    ? (<><Link href={'/Page/user/log-out'}>logOut</Link>|<Link
+                    ? (<><button onClick={logOut}>logOut</button>|<Link
                         href={'/Page/user/signIn'}>SignIn</Link></>)
                     : <Link href={'/Page/user/sign-up'}>SignUp</Link>}
             </div>
