@@ -1,18 +1,23 @@
+'use client'
 import s from './sideBar.module.css'
 import Link from "next/link";
+import {useState} from "react";
 export const Sidebar = () =>{
-    const updateList = (newNameList: string) =>{
-
+    const [showSideBar, setShowSideBar] = useState(false)
+    const toggleShowSidebar = () => {
+        setShowSideBar(!showSideBar)
     }
     return(
-        <div className={s.Sidebar}>
+        <div className={`${s.Sidebar} ${showSideBar && s.open}`}>
             <div className={s.blockLink}>
-                <button onClick={() => {updateList('HotLibraries')}}>Hot Libraries</button>
-                <button onClick={() => {updateList('Example')}}>Example</button>
-                <button onClick={() => {updateList('Link')}}>Link</button>
-                <button onClick={() => {updateList('test1')}}>test1</button>
-                <button onClick={() => {updateList('test1')}}>test1</button>
+                <Link href={'/'} >Home</Link>
+                <Link href={'/Page/library'} >Hot Libraries</Link>
+                <Link href={'/Page/example'} >Example</Link>
+                <Link href={'/Page/link'} >Link</Link>
+                <Link href={'/Page/todos'} >Todos</Link>
+                <Link href={''} >Chat</Link>
             </div>
+            <button onClick={toggleShowSidebar} className={s.openBar}>||</button>
         </div>
     )
 }

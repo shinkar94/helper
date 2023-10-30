@@ -1,8 +1,8 @@
-import {HomeContent} from "@/components/widgets";
 import {HomePage} from "@/components";
+import {LibrariesContent} from "@/components/widgets/libraries";
 
 export default function Library(){
     return(
-        <HomePage><HomeContent/></HomePage>
+        <HomePage><LibrariesContent /></HomePage>
     )
 }

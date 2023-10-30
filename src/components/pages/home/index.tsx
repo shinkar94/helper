@@ -7,10 +7,10 @@ import useSWR from "swr";
 import {getUserData} from "@/app/api/api-query/getUserData";
 import {toggleInitial, toggleUser} from "@/app/store/authStore";
 
-type PropsType = {
-    children: ReactNode;
+type HomePageType = {
+    children: ReactNode
 }
-export const HomePage: FC<PropsType> = ({children}) => {
+export const HomePage:FC<HomePageType> = ({children}) => {
     const {data, isLoading, error} = useSWR("/api", getUserData);
     const initialization = useAuthStore((state) => state.initialization)
     useEffect(() => {
@@ -18,7 +18,6 @@ export const HomePage: FC<PropsType> = ({children}) => {
         if (data != undefined) {
             if (data.error) {
                 toggleInitial(false)
-                // router.push('/Page/user/signUp');
             } else {
                 toggleUser(data)
                 toggleInitial(true)
@@ -33,7 +32,7 @@ export const HomePage: FC<PropsType> = ({children}) => {
                 {isLoading
                     ? <h1>Loading.....</h1>
                     : <div className={'content'}>
-                        {initialization ? <HomeContent/> : <SignIn/>}
+                        {initialization ? children : <SignIn/>}
                     </div>
                 }
             </div>
