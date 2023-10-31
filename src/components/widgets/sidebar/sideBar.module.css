@@ -1,10 +1,21 @@
 .Sidebar{
-    position: absolute;
-    left: -110px;
+    position: fixed;
+    top: 0;
+    width: 40px;
+    overflow: hidden;
+    left: 0;
     display: flex;
-    background: gray;
-    height: calc(100vh - 60px);
-    transition: left 0.5s ease-in-out;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: rgba(38, 81, 124, 0.59);
+    height: 100vh;
+    transition: width 0.5s ease-in-out;
+}
+.Sidebar:hover{
+    width: 120px;
+}
+.line{
+    width: 90%;
 }
 .open{
     left: 0;
@@ -18,5 +29,26 @@
     flex-direction: column;
     gap: 5px;
     padding: 5px;
-    height: calc(100% - 10px);
+}
+
+.Sidebar .blockLink .link{
+
+}
+.Sidebar .blockLink .link:hover{
+    background: #26517C;
+}
+.Sidebar .blockLink .link a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #ffffff;
+}
+.Sidebar .blockLink .link .linkSvg{
+    width: 30px;
+    height: 30px;
+}
+.Sidebar .blockLink .link .linkSvg svg{
+    width: 30px;
+    height: 30px;
 }
