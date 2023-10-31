@@ -25,9 +25,8 @@ export const HomePage:FC<HomePageType> = ({children}) => {
         }
     }, [data]);
     return (
-        <div className={s.homeWrapper}>
-            <Header/>
-            <div className={s.contentWrapper}>
+        <div className={'homeWrapper'}>
+            <div className={'contentWrapper'}>
                 <Sidebar/>
                 {isLoading
                     ? <h1>Loading.....</h1>
