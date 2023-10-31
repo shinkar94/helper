@@ -1,5 +1,5 @@
 'use client'
-import s from './sideBar.module.css'
+import s from './sideBar.module.scss'
 import Link from "next/link";
 import {useState} from "react";
 import {

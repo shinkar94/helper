@@ -15,9 +15,11 @@
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.5.3",
     "next": "latest",
+    "node-sass": "^9.0.0",
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "^7.47.0",
+    "sass": "^1.69.5",
     "swr": "^2.2.4",
     "zod": "^3.22.4",
     "zustand": "^4.4.1"

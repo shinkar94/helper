@@ -1,6 +1,5 @@
 'use client'
-import {Header, HomeContent, Sidebar, SignIn} from "@/components/widgets";
-import s from './home.module.css'
+import {Sidebar, SignIn} from "@/components/widgets";
 import {FC, ReactNode, useEffect} from "react";
 import {useAuthStore} from "@/app/store";
 import useSWR from "swr";
