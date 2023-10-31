@@ -1,7 +1,6 @@
 'use client'
 import s from './sideBar.module.scss'
 import Link from "next/link";
-import {useState} from "react";
 import {
     ChatIcon,
     CodeIcon,
@@ -15,32 +14,15 @@ import {
 } from "@/components/shared";
 import {useAuthStore} from "@/app/store";
 import Image from "next/image";
-import {removeUser} from "@/app/store/authStore";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
-export const Sidebar = () =>{
-    const user:PayloadType = useAuthStore((state) => state.user)
+import {UseLogOut} from "@/hok";
+
+export const Sidebar = () => {
+    const user: PayloadType = useAuthStore((state) => state.user)
     const initialization = useAuthStore((state) => state.initialization)
-    const [showSideBar, setShowSideBar] = useState(false)
-    const toggleShowSidebar = () => {
-        setShowSideBar(!showSideBar)
-    }
-    const logOut = async (event: React.MouseEvent<HTMLDivElement>) => {
-        event.preventDefault()
-        try {
-            const response = await fetch("/api/auth/logout", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-            });
-            if(response.status){
-                removeUser()
-            }
-            console.log(response)
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    return(
-        <div className={`${s.Sidebar} ${showSideBar && s.open}`}>
+    const {logOut} = UseLogOut()
+    return (
+        <div className={`${s.Sidebar}`}>
             <div className={s.blockLink}>
                 <div className={s.linkImage}><Link href={'/'} ><div className={s.linkSvg}>{user.avatarUrl ? <Image src={user.avatarUrl} width={30} height={30} alt={'logoImg'}/> : <UserDefault/>}</div></Link></div>
             </div>
