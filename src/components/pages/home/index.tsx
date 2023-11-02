@@ -6,6 +6,7 @@ import useSWR from "swr";
 import {getUserData} from "@/app/api/api-query/getUserData";
 import {toggleInitial, toggleUser} from "@/app/store/authStore";
 import {SessionProvider} from "next-auth/react";
+import Providers from "@/providers/providers";
 
 type HomePageType = {
     children: ReactNode
@@ -32,9 +33,9 @@ export const HomePage:FC<HomePageType> = ({children}) => {
                         ? <h1>Loading.....</h1>
                         : <div className={'content'}>
                             {initialization
-                                ? <SessionProvider>
+                                ? <Providers>
                                     {children}
-                                </SessionProvider>
+                                </Providers>
                                 : <SignIn/>}
                         </div>
                     }

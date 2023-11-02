@@ -11,7 +11,7 @@ export const HomeContent = () => {
             This home content
 
             <h5>Email google: </h5>
-            {session
+            {session && session.user
                 ? (<>
                     <div>Welcome {session.user?.email}</div>
                     <button onClick={() => signOut()}>SignOut from Google</button>
