@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
     ChatIcon,
     CodeIcon,
-    ExitIcon,
+    ExitIcon, GoogleIcon,
     HomeIcon,
     LibIcon,
     LinkIcon,
@@ -15,16 +15,22 @@ import {
 import {useAuthStore} from "@/app/store";
 import Image from "next/image";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
-import {UseLogOut} from "@/hok";
+import {UseLogOut} from "../../shared/hok";
 
 export const Sidebar = () => {
     const user: PayloadType = useAuthStore((state) => state.user)
     const initialization = useAuthStore((state) => state.initialization)
-    const {logOut} = UseLogOut()
+    const {logOut, googleLogin, session} = UseLogOut()
+    console.log(session && session.user?.image)
     return (
         <div className={`${s.Sidebar}`}>
             <div className={s.blockLink}>
-                <div className={s.linkImage}><Link href={'/'} ><div className={s.linkSvg}>{user.avatarUrl ? <Image src={user.avatarUrl} width={30} height={30} alt={'logoImg'}/> : <UserDefault/>}</div></Link></div>
+                <div className={s.linkImage}>
+                    <Link href={'/'} ><div className={s.linkSvg}>{user.avatarUrl
+                        ? <Image src={session?.user?.image ?? user.avatarUrl} width={30} height={30} alt={'logoImg'}/>
+                        : <UserDefault/>}</div>
+                    </Link>
+                </div>
             </div>
             <hr className={s.line}/>
             <div className={s.blockLink}>
@@ -40,7 +46,8 @@ export const Sidebar = () => {
                 <div className={s.link}><Link href={''} ><div className={s.linkSvg}><SettingsIcon/></div> Settings</Link></div>
                 {initialization
                     ? <div className={s.link} onClick={logOut}><Link href={''} ><div className={s.linkSvg}><ExitIcon/></div> Logout</Link></div>
-                    : <div className={s.link}><Link href={'/Page/user/sign-up'} ><div className={s.linkSvg}><ExitIcon/></div> SignUp</Link></div>}
+                    : (<><div className={s.link}><Link href={'/Page/user/sign-up'} ><div className={s.linkSvg}><ExitIcon/></div> SignUp</Link></div>
+                    <div className={s.link} onClick={googleLogin}><Link href={'/Page/user/sign-up'} ><div className={s.linkSvg}><GoogleIcon/></div>with Google</Link></div></>)}
             </div>
         </div>
     )
