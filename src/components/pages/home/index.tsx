@@ -5,6 +5,8 @@ import {useAuthStore} from "@/app/store";
 import useSWR from "swr";
 import {getUserData} from "@/app/api/api-query/getUserData";
 import {toggleInitial, toggleUser} from "@/app/store/authStore";
+import {SessionProvider} from "next-auth/react";
+import Providers from "@/providers/providers";
 
 type HomePageType = {
     children: ReactNode
@@ -24,16 +26,20 @@ export const HomePage:FC<HomePageType> = ({children}) => {
         }
     }, [data]);
     return (
-        <div className={'homeWrapper'}>
-            <div className={'contentWrapper'}>
-                <Sidebar/>
-                {isLoading
-                    ? <h1>Loading.....</h1>
-                    : <div className={'content'}>
-                        {initialization ? children : <SignIn/>}
-                    </div>
-                }
+            <div className={'homeWrapper'}>
+                <div className={'contentWrapper'}>
+                    <Sidebar/>
+                    {isLoading
+                        ? <h1>Loading.....</h1>
+                        : <div className={'content'}>
+                            {initialization
+                                ? <Providers>
+                                    {children}
+                                </Providers>
+                                : <SignIn/>}
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
     )
 }
