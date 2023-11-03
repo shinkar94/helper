@@ -4,7 +4,8 @@ import Link from "next/link";
 import {
     ChatIcon,
     CodeIcon,
-    ExitIcon, GoogleIcon,
+    ExitIcon,
+    GoogleIcon,
     HomeIcon,
     LibIcon,
     LinkIcon,
@@ -15,12 +16,12 @@ import {
 import {useAuthStore} from "@/app/store";
 import Image from "next/image";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
-import {UseLogOut} from "../../shared/hok";
+import {UseAuthUser} from "../../shared/hok";
 
 export const Sidebar = () => {
     const user: PayloadType = useAuthStore((state) => state.user)
     const initialization = useAuthStore((state) => state.initialization)
-    const {logOut, googleLogin, session} = UseLogOut()
+    const {logOut, googleLogin, session} = UseAuthUser()
     console.log(session && session.user?.image)
 
     return (

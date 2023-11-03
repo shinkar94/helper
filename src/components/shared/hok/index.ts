@@ -1,1 +1,1 @@
-export {UseLogOut} from './useLogOut'
+export {UseAuthUser} from './useLogOut'

@@ -23,6 +23,7 @@ body{
     --gl-white: #fbe4d8;
     --gl-red: #ae445a;
     --gl-gold: #f39f5a;
+    --gl-gold-opacity: rgba(243, 159, 90, 0.61);
     --gl-blue-900: rgba(38, 81, 124, 0.59);
     --gl-blue-600: #26517C;
 

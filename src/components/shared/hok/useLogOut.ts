@@ -3,7 +3,7 @@ import {removeUser} from "@/app/store/authStore";
 import {useSession, signIn, signOut} from 'next-auth/react'
 
 
-export const UseLogOut = () => {
+export const UseAuthUser = () => {
     const {data: session} = useSession()
     async function logOut(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault()
