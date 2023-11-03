@@ -22,6 +22,7 @@ export const Sidebar = () => {
     const initialization = useAuthStore((state) => state.initialization)
     const {logOut, googleLogin, session} = UseLogOut()
     console.log(session && session.user?.image)
+
     return (
         <div className={`${s.Sidebar}`}>
             <div className={s.blockLink}>
