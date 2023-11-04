@@ -14,11 +14,15 @@ export const UseAuthUser = () => {
             });
             if (response.status) {
                 removeUser()
+                signOutGoogle()
             }
             console.log(response)
         } catch (error) {
             console.log(error);
         }
+    }
+    function signOutGoogle(){
+        signOut()
     }
 
     function googleLogin (event: React.MouseEvent<HTMLDivElement>) {
@@ -26,5 +30,5 @@ export const UseAuthUser = () => {
         signIn()
     }
 
-    return {logOut, googleLogin, session}
+    return {logOut, googleLogin,signOutGoogle, session}
 }

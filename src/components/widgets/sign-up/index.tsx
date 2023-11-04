@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signUpSchema, TypeSignUpSchema, UserResponseType} from "@/lib/types";
@@ -14,14 +14,19 @@ import {UseAuthUser} from "@/components/shared/hok";
 
 
 export const SignUp = () => {
-    const {googleLogin, session} = UseAuthUser()
+    const {googleLogin,signOutGoogle, session} = UseAuthUser()
     const {
         register,
         handleSubmit,
         formState: {errors, isSubmitting},
-        reset
+        reset,
+        setValue
     } = useForm<TypeSignUpSchema>({resolver: zodResolver(signUpSchema)})
 
+    useEffect(() => {
+        setValue("fullName", session?.user?.name || "");
+        setValue("email", session?.user?.email || "");
+    }, [session]);
     const onSubmit = async (dataForm: TypeSignUpSchema) => {
         try {
             const response = await fetch("/api/auth/register", {
@@ -40,17 +45,16 @@ export const SignUp = () => {
         }
     };
 
-
     return (
         <div className={s.wrapperAuth}>
             <div className={s.auth}>
                 <div className={s.mehanics}>
-                    <div className={s.shet1}><Image src={Gear} alt="Gear"/></div>
-                    <div className={s.shet2}><Image src={Gear} alt="Gear"/></div>
-                    <div className={s.shet3}><Image src={Gear} alt="Gear"/></div>
-                    <div className={s.shet4}><Image src={Gear} alt="Gear"/></div>
-                    <div className={s.shet5}><Image src={Gear} alt="Gear"/></div>
-                    <div className={s.shet6}><Image src={Gear} alt="Gear"/></div>
+                    <div className={s.shet1}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet2}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet3}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet4}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet5}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet6}><Image src={Gear} alt="Gear" priority/></div>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h3>SignUp</h3>
@@ -58,18 +62,14 @@ export const SignUp = () => {
                     {errors.password && (<p>{`${errors.password.message}`}</p>)}
                     {errors.confirmPassword && (<p>{`${errors.confirmPassword.message}`}</p>)}
                     {errors.fullName && (<p>{`${errors.fullName.message}`}</p>)}
-                    <input type={'text'}
+                    <input type={!!(session && session.user) ? 'hidden' : 'text'}
                            {...register('fullName')}
-                           placeholder={'Full Name'}
-                           disabled={!!(session && session.user)}
-                            value={session && session.user ? session.user.name || '' : ''}/>
-                    <input type={'email'}
+                           placeholder={'Full Name'}/>
+                    <input type={!!(session && session.user) ? 'hidden' : 'email'}
                            {...register('email', {
                                required: "Email is required"
                            })}
-                           placeholder={'Email'}
-                           disabled={!!(session && session.user)}
-                            value={session && session.user ? session.user.email || '' : ''}/>
+                           placeholder={'Email'}/>
                     <input type={'password'}
                            {...register('password')}
                            placeholder={'Password'}/>
@@ -77,13 +77,25 @@ export const SignUp = () => {
                            {...register('confirmPassword')}
                            placeholder={'Confirm Password'}/>
                     <div className={s.btnPanel}>
-                        <Link href={'/Page/user/signIn'}>Sign In</Link>
+                        <Link href={'/'}>Sign In</Link>
                         <button type={'submit'} disabled={isSubmitting}>Send</button>
                     </div>
                 </form>
                 <div className={s.googleAuth}>
-                    <div className={s.googleBtn} onClick={googleLogin}><GoogleIcon/><p>Registration with Google</p>
-                    </div>
+                    {
+                        session && session.user
+                            ? <div className={s.googleBtn} onClick={signOutGoogle}>
+                                <Image src={session?.user?.image ?? ''} width={'30'} height={'30'} alt={'googleImage'} priority/>
+                                <p>
+                                    Leave session  {
+                                    session.user.email && session.user.email?.length > 10
+                                    ? session.user.email.slice(0, 10) + '...'
+                                    : session.user.email
+                                    }
+                                </p>
+                            </div>
+                            : <div className={s.googleBtn} onClick={googleLogin}><GoogleIcon/><p>Registration with Google</p></div>
+                    }
                 </div>
             </div>
         </div>

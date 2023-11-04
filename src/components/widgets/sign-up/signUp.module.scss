@@ -64,6 +64,7 @@
     }
     .googleAuth{
       margin: 10px 0 20px 0;
+      max-width: 280px;
       .googleBtn{
         display: flex;
         align-items: center;
@@ -80,6 +81,9 @@
         & svg{
           width: 30px;
           height: 30px;
+        }
+        & img{
+          border-radius: 50%;
         }
         &:hover{
           background-image: linear-gradient(#D8514D 0%,#B92C28 100%);
