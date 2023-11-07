@@ -1,27 +1,21 @@
 'use client'
 import {useAuthStore} from "@/app/store/authStore";
-import {useSession, signIn, signOut} from 'next-auth/react'
+import s from './homeContent.module.scss'
+import Image from "next/image";
 
 export const HomeContent = () => {
-    const {data: session} = useSession()
     const user = useAuthStore((state) => state.user)
     return (
-        <>
-            <h3>Email: {user.email}</h3>
-            This home content
-
-            <h5>Email google: </h5>
-            {session && session.user
-                ? (<>
-                    <div>Welcome {session.user?.email}</div>
-                    <button onClick={() => signOut()}>SignOut from Google</button>
-                </>)
-                : (<>
-                        <div>You are not sign in</div>
-                        <button onClick={() => signIn()}>SignIn to Google</button>
-                    </>
-                )
-            }
-        </>
+        <div className={s.wrapper}>
+            <div className={s.content}>
+                <div className={s.userBlock}>
+                    <Image src={user.avatarUrl} alt={'userImg'} width={'80'} height={'80'} priority/>
+                    <div className={s.infoUser}>
+                        <h3>{user.fullName}</h3>
+                        <p>{user.email}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }

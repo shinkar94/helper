@@ -1,0 +1,22 @@
+.wrapper{
+  .content{
+    width: calc(100vw - 60px);
+    margin-left: 60px;
+    .userBlock{
+      padding: 5px;
+      display: flex;
+      gap: 5px;
+      & img{
+        border-radius: 10px;
+      }
+      .infoUser{
+        & p{
+          margin: 4px;
+        }
+        & h3{
+          margin: 4px;
+        }
+      }
+    }
+  }
+}

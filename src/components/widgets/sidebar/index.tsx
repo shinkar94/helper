@@ -21,7 +21,7 @@ import {UseAuthUser} from "../../shared/hok";
 export const Sidebar = () => {
     const user: PayloadType = useAuthStore((state) => state.user)
     const initialization = useAuthStore((state) => state.initialization)
-    const {logOut, googleLogin, session} = UseAuthUser()
+    const {logOut, session} = UseAuthUser()
     console.log(session && session.user?.image)
 
     return (
@@ -48,8 +48,7 @@ export const Sidebar = () => {
                 <div className={s.link}><Link href={''} ><div className={s.linkSvg}><SettingsIcon/></div> Settings</Link></div>
                 {initialization
                     ? <div className={s.link} onClick={logOut}><Link href={''} ><div className={s.linkSvg}><ExitIcon/></div> Logout</Link></div>
-                    : (<><div className={s.link}><Link href={'/Page/user/sign-up'} ><div className={s.linkSvg}><ExitIcon/></div> SignUp</Link></div>
-                    <div className={s.link} onClick={googleLogin}><Link href={'/Page/user/sign-up'} ><div className={s.linkSvg}><GoogleIcon/></div>with Google</Link></div></>)}
+                    : (<div className={s.link}><Link href={'/Page/user/sign-up'} ><div className={s.linkSvg}><ExitIcon/></div> SignUp</Link></div>)}
             </div>
         </div>
     )

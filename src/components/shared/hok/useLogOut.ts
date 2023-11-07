@@ -1,6 +1,8 @@
 'use client'
-import {removeUser} from "@/app/store/authStore";
+import {removeUser, toggleUser} from "@/app/store/authStore";
 import {useSession, signIn, signOut} from 'next-auth/react'
+import {UserResponseType} from "@/lib/types";
+import {PayloadType} from "@/app/service/generate-token/generateToken";
 
 
 export const UseAuthUser = () => {
@@ -13,10 +15,26 @@ export const UseAuthUser = () => {
                 headers: {"Content-Type": "application/json"},
             });
             if (response.status) {
-                removeUser()
                 signOutGoogle()
+                removeUser()
             }
             console.log(response)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const sendGoogleData = async (email: string) => {
+        const dataForm = {email}
+        try {
+            const response = await fetch("/api/auth/loginGoogle", {
+                method: "POST",
+                body: JSON.stringify(dataForm),
+                headers: { "Content-Type": "application/json" },
+            });
+            const data: UserResponseType = await response.json();
+            const { _id, email, avatarUrl, fullName } = data;
+            const user: PayloadType = { id: _id, email, avatarUrl, fullName };
+            toggleUser(user);
         } catch (error) {
             console.log(error);
         }
@@ -30,5 +48,5 @@ export const UseAuthUser = () => {
         signIn()
     }
 
-    return {logOut, googleLogin,signOutGoogle, session}
+    return {logOut, googleLogin,signOutGoogle,sendGoogleData, session}
 }

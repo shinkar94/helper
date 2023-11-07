@@ -15,7 +15,7 @@ interface ManagersStoreActions {
 }
 
 
-export const useAuthStore = create(
+export const useAuthStore = create(devtools(
     immer<ManagersStoreState & ManagersStoreActions>((set) => ({
             initialization: false,
             user: {
@@ -49,6 +49,6 @@ export const useAuthStore = create(
                 })
             }
         })
-    ))
+    )))
 
 export const {toggleInitial, toggleUser, removeUser} = useAuthStore.getState()

@@ -11,9 +11,11 @@ import Gear from "../../shared/icon/shes1.png"
 import s from './signUp.module.scss'
 import {GoogleIcon} from "@/components/shared";
 import {UseAuthUser} from "@/components/shared/hok";
+import {useRouter} from "next/navigation";
 
 
 export const SignUp = () => {
+    const router = useRouter();
     const {googleLogin,signOutGoogle, session} = UseAuthUser()
     const {
         register,
@@ -26,6 +28,7 @@ export const SignUp = () => {
     useEffect(() => {
         setValue("fullName", session?.user?.name || "");
         setValue("email", session?.user?.email || "");
+        setValue("avatarUrl", session?.user?.image || "");
     }, [session]);
     const onSubmit = async (dataForm: TypeSignUpSchema) => {
         try {
@@ -40,6 +43,7 @@ export const SignUp = () => {
             toggleUser(user)
             toggleInitial(true)
             reset();
+            router.push('/')
         } catch (error) {
             console.log(error);
         }
@@ -76,6 +80,8 @@ export const SignUp = () => {
                     <input type={'password'}
                            {...register('confirmPassword')}
                            placeholder={'Confirm Password'}/>
+                    <input type={'hidden'}
+                           {...register('avatarUrl')}/>
                     <div className={s.btnPanel}>
                         <Link href={'/'}>Sign In</Link>
                         <button type={'submit'} disabled={isSubmitting}>Send</button>

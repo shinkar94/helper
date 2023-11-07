@@ -8,11 +8,16 @@ import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {useAuthStore} from "@/app/store";
 import {toggleUser} from "@/app/store/authStore";
+import s from './signIn.module.scss';
+import Image from "next/image";
+import Gear from "@/components/shared/icon/shes1.png";
+import {GoogleIcon} from "@/components/shared";
+import {UseAuthUser} from "@/components/shared/hok";
 
 
 export const SignIn = () =>{
     const initialization = useAuthStore((state) => state.initialization)
-    const [infoStatus, setInfoStatus] = useState('')
+    const {sendGoogleData, googleLogin, session} = UseAuthUser()
     console.log("initialization",initialization)
 
     const router = useRouter();
@@ -21,6 +26,12 @@ export const SignIn = () =>{
             router.push('/');
         }
     }, [initialization]);
+
+    useEffect(()=>{
+        if(session && session.user?.email && initialization === false){
+            sendGoogleData(session.user.email)
+        }
+    }, [session])
     const {
         register,
         handleSubmit,
@@ -47,22 +58,37 @@ export const SignIn = () =>{
 
 
     return(
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <h3>SignIn</h3>
-                {errors.email && (<p>{`${errors.email.message}`}</p>)}
-                {errors.password && (<p>{`${errors.password.message}`}</p>)}
-                <input type={'email'}
-                       {...register('email', {
-                           required: "Email is required"
-                       })}
-                       placeholder={'Email'}/>
-                <input type={'password'}
-                       {...register('password')}
-                       placeholder={'Password'}/>
-                <button type={'submit'} disabled={isSubmitting}>send</button>
-            </form>
-            <Link href={'/Page/user/signUp'}>Sign Up</Link>
-        </>
+        <div className={s.wrapperAuth}>
+            <div className={s.auth}>
+                <div className={s.mehanics}>
+                    <div className={s.shet1}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet2}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet3}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet4}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet5}><Image src={Gear} alt="Gear" priority/></div>
+                    <div className={s.shet6}><Image src={Gear} alt="Gear" priority/></div>
+                </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <h3>SignIn</h3>
+                    {errors.email && (<p>{`${errors.email.message}`}</p>)}
+                    {errors.password && (<p>{`${errors.password.message}`}</p>)}
+                    <input type={'email'}
+                           {...register('email', {
+                               required: "Email is required"
+                           })}
+                           placeholder={'Email'}/>
+                    <input type={'password'}
+                           {...register('password')}
+                           placeholder={'Password'}/>
+                    <div className={s.btnPanel}>
+                        <Link href={'/Page/user/sign-up'}>Sign Up</Link>
+                        <button type={'submit'} disabled={isSubmitting}>Send</button>
+                    </div>
+                </form>
+                <div className={s.googleAuth}>
+                    <div className={s.googleBtn} onClick={googleLogin}><GoogleIcon/><p>Registration with Google</p></div>
+                </div>
+            </div>
+        </div>
     )
 }
