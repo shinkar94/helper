@@ -3,14 +3,16 @@ import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {immer} from "zustand/middleware/immer";
 import {devtools} from "zustand/middleware";
 
-interface ManagersStoreState {
+export interface ManagersStoreState {
     initialization: boolean,
     user: PayloadType
+    loading: boolean
 }
 
-interface ManagersStoreActions {
+export interface ManagersStoreActions {
     toggleInitial: (status: boolean) => void
     toggleUser: (payload: PayloadType) => void
+    setLoading: (status: boolean) => void
     removeUser: () => void
 }
 
@@ -18,6 +20,7 @@ interface ManagersStoreActions {
 export const useAuthStore = create(devtools(
     immer<ManagersStoreState & ManagersStoreActions>((set) => ({
             initialization: false,
+            loading: false,
             user: {
                 id: '',
                 email: '',
@@ -26,6 +29,8 @@ export const useAuthStore = create(devtools(
             },
             toggleInitial: (status: boolean) =>
                 set({initialization: status}),
+            setLoading: (status: boolean) =>
+                set({loading: status}),
             toggleUser: (payload: PayloadType) => {
                 set((state) => {
                     state.user = {
@@ -35,6 +40,7 @@ export const useAuthStore = create(devtools(
                         avatarUrl: payload.avatarUrl
                     }
                     state.initialization = true
+                    state.loading = false
                 })
             },
             removeUser: () => {
@@ -46,6 +52,7 @@ export const useAuthStore = create(devtools(
                         avatarUrl: ''
                     }
                     state.initialization = false
+                    state.loading = false
                 })
             }
         })

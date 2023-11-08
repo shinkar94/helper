@@ -1,5 +1,5 @@
 'use client'
-import {removeUser, toggleUser} from "@/app/store/authStore";
+import {removeUser, toggleUser, useAuthStore} from "@/app/store/authStore";
 import {useSession, signIn, signOut} from 'next-auth/react'
 import {UserResponseType} from "@/lib/types";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
@@ -7,8 +7,10 @@ import {PayloadType} from "@/app/service/generate-token/generateToken";
 
 export const UseAuthUser = () => {
     const {data: session} = useSession()
+    const {setLoading} = useAuthStore()
     async function logOut(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault()
+        setLoading(true)
         try {
             const response = await fetch("/api/auth/logout", {
                 method: "GET",
@@ -21,9 +23,11 @@ export const UseAuthUser = () => {
             console.log(response)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     }
     const sendGoogleData = async (email: string) => {
+        setLoading(true)
         const dataForm = {email}
         try {
             const response = await fetch("/api/auth/loginGoogle", {
@@ -37,6 +41,7 @@ export const UseAuthUser = () => {
             toggleUser(user);
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     }
     function signOutGoogle(){
