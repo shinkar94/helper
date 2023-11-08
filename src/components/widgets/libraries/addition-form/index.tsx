@@ -6,7 +6,7 @@ import {useAuthStore} from "@/app/store/authStore";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import React from "react";
 import {toggleModalWindow} from "@/app/store/switchStore";
-import {addOneLink} from "@/app/store/LibStore";
+import {addOneLink, LibType} from "@/app/store/LibStore";
 
 export const AdditionForm = () =>{
     const user: PayloadType = useAuthStore((state) => state.user)
@@ -28,7 +28,7 @@ export const AdditionForm = () =>{
             });
             const data:ResponseHotLibType = await response.json();
             const {title, code, author, idAuthor, _id} = data
-            const link:LibType = {title, code, author, idAuthor, id: _id}
+            const link: LibType = {title, code, author, idAuthor, id: _id}
             addOneLink(link)
             reset();
         } catch (error) {

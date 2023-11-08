@@ -2,7 +2,7 @@ import {create} from "zustand";
 import {immer} from "zustand/middleware/immer";
 import {devtools} from "zustand/middleware";
 
-type LibType = {
+export type LibType = {
     "title": "CRA",
     "code": "CRA",
     "author": "romka94shinkarenko@gmail.com",
