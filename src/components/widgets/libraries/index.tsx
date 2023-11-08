@@ -3,7 +3,7 @@ import s from './libraries.module.scss';
 import {AdditionForm} from "@/components/widgets/libraries/addition-form";
 import {toggleModalWindow, useSwitchStore} from "@/app/store/switchStore";
 import {ModalWindow} from "@/components/widgets/modal-window";
-import {ManagersStoreState, useLibStore} from "@/app/store/LibStore";
+import {LibType, ManagersStoreState, useLibStore} from "@/app/store/LibStore";
 
 export const LibrariesContent = () => {
     const myLib: LibType[] = useLibStore((state: ManagersStoreState)=> state.myHotLib)
