@@ -22,7 +22,6 @@ export const Sidebar = () => {
     const user: PayloadType = useAuthStore((state) => state.user)
     const initialization = useAuthStore((state) => state.initialization)
     const {logOut, session} = UseAuthUser()
-    console.log(session && session.user?.image)
 
     return (
         <div className={`${s.Sidebar}`}>
