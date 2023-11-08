@@ -1,7 +1,6 @@
 import {create} from "zustand";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {immer} from "zustand/middleware/immer";
-import {devtools} from "zustand/middleware";
 
 export interface ManagersStoreState {
     initialization: boolean,
@@ -17,7 +16,7 @@ export interface ManagersStoreActions {
 }
 
 
-export const useAuthStore = create(devtools(
+export const useAuthStore = create(
     immer<ManagersStoreState & ManagersStoreActions>((set) => ({
             initialization: false,
             loading: false,
@@ -56,6 +55,6 @@ export const useAuthStore = create(devtools(
                 })
             }
         })
-    )))
+    ))
 
 export const {toggleInitial, toggleUser, removeUser} = useAuthStore.getState()

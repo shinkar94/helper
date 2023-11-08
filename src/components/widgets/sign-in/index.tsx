@@ -18,14 +18,6 @@ import {UseAuthUser} from "@/components/shared/hok";
 export const SignIn = () =>{
     const initialization = useAuthStore((state) => state.initialization)
     const {sendGoogleData, googleLogin, session} = UseAuthUser()
-    console.log("initialization",initialization)
-
-    const router = useRouter();
-    useEffect(() => {
-        if (initialization) {
-            router.push('/');
-        }
-    }, [initialization]);
 
     useEffect(()=>{
         if(session && session.user?.email && initialization === false){

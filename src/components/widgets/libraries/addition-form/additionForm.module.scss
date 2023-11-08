@@ -1,0 +1,49 @@
+.blockForm{
+  position: relative;
+  background: var(--gl-black-900);
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  & h4{
+    text-align: center;
+    margin: 5px;
+  }
+  .closeBtn{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: var(--gl-gold-opacity);
+    &:hover{
+      background: var(--gl-gold);
+    }
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    & input{
+      height: 30px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      font-size: 18px;
+      color: var(--gl-white);
+      background-color: rgba(63, 63, 63, 0.66);
+      box-shadow: 0 0 5px #000;
+      border: 0;
+      &::placeholder{
+        color: #fff;
+      }
+    }
+    & button{
+      height: 30px;
+      cursor: pointer;
+      background: var(--gl-gold-opacity);
+      &:hover{
+        background: var(--gl-gold);
+      }
+    }
+  }
+}
