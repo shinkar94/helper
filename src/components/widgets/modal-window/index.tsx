@@ -1,6 +1,7 @@
 import s from './modalWindow.module.scss'
+import {ReactNode} from "react";
 type PropsType = {
-    children: ChildNode
+    children: ReactNode
 }
 export const ModalWindow = ({children}:PropsType) => {
     return <div className={s.modalWrapper}>{children}</div>
