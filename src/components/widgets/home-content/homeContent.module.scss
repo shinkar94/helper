@@ -20,3 +20,16 @@
     }
   }
 }
+@media (max-width: 900px) {
+  .wrapper{
+    .content{
+      .userBlock{
+        flex-direction: column;
+        align-items: center;
+        .infoUser{
+          text-align: center;
+        }
+      }
+    }
+  }
+}

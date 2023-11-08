@@ -157,3 +157,24 @@
   50%{box-shadow: 0 0 10px 10px rgba(255, 0, 0, 0.623);}
   100%{box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.623);}
 }
+
+@media (max-width: 900px) {
+  .wrapperAuth{
+    width: calc(100vw - 60px);
+    margin-left: 60px;
+    .auth{
+      form{
+        align-items: center;
+        input{
+          width: 230px;
+        }
+        .btnPanel{
+          & button, a{
+            width: 110px;
+          }
+        }
+
+      }
+    }
+  }
+}
