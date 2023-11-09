@@ -17,18 +17,20 @@ import {useAuthStore} from "@/app/store";
 import Image from "next/image";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {UseAuthUser} from "../../shared/hok";
+import {useSWRConfig} from "swr";
+import {UserType} from "@/lib/types";
 
 export const Sidebar = () => {
-    const user: PayloadType = useAuthStore((state) => state.user)
-    const initialization = useAuthStore((state) => state.initialization)
+    const {cache} = useSWRConfig()
+    const userData:UserType = cache.get('/api')?.data
     const {logOut, session} = UseAuthUser()
 
     return (
         <div className={`${s.Sidebar}`}>
             <div className={s.blockLink}>
                 <div className={s.linkImage}>
-                    <Link href={'/'} ><div className={s.linkSvg}>{user.avatarUrl
-                        ? <Image src={session?.user?.image ?? user.avatarUrl} width={30} height={30} alt={'logoImg'}/>
+                    <Link href={'/'} ><div className={s.linkSvg}>{userData?.id
+                        ? <Image src={session?.user?.image ?? userData.avatarUrl} width={30} height={30} alt={'logoImg'}/>
                         : <UserDefault/>}</div>
                     </Link>
                 </div>
@@ -45,7 +47,7 @@ export const Sidebar = () => {
             <hr className={s.line}/>
             <div className={s.blockLink}>
                 <div className={s.link}><Link href={''} ><div className={s.linkSvg}><SettingsIcon/></div> Settings</Link></div>
-                {initialization
+                {userData?.id
                     ? <div className={s.link} onClick={logOut}><Link href={''} ><div className={s.linkSvg}><ExitIcon/></div> Logout</Link></div>
                     : (<div className={s.link}><Link href={'/Page/user/sign-up'} ><div className={s.linkSvg}><ExitIcon/></div> SignUp</Link></div>)}
             </div>

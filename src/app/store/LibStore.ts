@@ -9,23 +9,32 @@ export type LibType = {
     "idAuthor": string,
     "id": string,
 }
+
 export interface ManagersStoreState {
     myHotLib: LibType[],
+    linksReceived: boolean
 }
 
 export interface ManagersStoreActions {
     addOneLink: (link: LibType) => void
+    getAllLink: (links: LibType[]) => void
 }
 
 
 export const useLibStore = create(devtools(
     immer<ManagersStoreState & ManagersStoreActions>((set) => ({
             myHotLib: [],
+            linksReceived: false,
             addOneLink: (link: LibType) =>
                 set((state) => {
                     state.myHotLib = [...state.myHotLib, link]
                 }),
+            getAllLink: (links: LibType[]) =>
+                set((state) => {
+                    state.linksReceived = true
+                    state.myHotLib = [...links]
+                })
         })
     )))
 
-export const {addOneLink} = useLibStore.getState()
+export const {addOneLink, getAllLink} = useLibStore.getState()
