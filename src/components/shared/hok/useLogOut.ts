@@ -1,6 +1,6 @@
 'use client'
-import {removeUser, toggleUser, useAuthStore} from "@/app/store/authStore";
-import {useSession, signIn, signOut} from 'next-auth/react'
+import {toggleInitial, useAuthStore} from "@/app/store/authStore";
+import {signIn, signOut, useSession} from 'next-auth/react'
 import {UserResponseType} from "@/lib/types";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {useSWRConfig} from "swr";
@@ -40,7 +40,7 @@ export const UseAuthUser = () => {
             const data: UserResponseType = await response.json();
             const { _id, email, avatarUrl, fullName } = data;
             const user: PayloadType = { id: _id, email, avatarUrl, fullName };
-            toggleUser(user);
+            toggleInitial(true)
         } catch (error) {
             console.log(error);
             setLoading(false)

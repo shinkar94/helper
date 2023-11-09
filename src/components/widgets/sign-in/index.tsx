@@ -1,13 +1,11 @@
 'use client'
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signInSchema, TypeSignInSchema, UserResponseType} from "@/lib/types";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
-import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {useAuthStore} from "@/app/store";
-import {toggleUser} from "@/app/store/authStore";
 import s from './signIn.module.scss';
 import Image from "next/image";
 import Gear from "@/components/shared/icon/shes1.png";
@@ -24,6 +22,7 @@ export const SignIn = () =>{
             sendGoogleData(session.user.email)
         }
     }, [session])
+
     const {
         register,
         handleSubmit,
@@ -41,7 +40,6 @@ export const SignIn = () =>{
             const data:UserResponseType = await response.json();
             const {_id,email,avatarUrl,fullName} = data
             const user:PayloadType = {id: _id, email, avatarUrl, fullName}
-            toggleUser(user)
             reset();
         } catch (error) {
             console.log(error);

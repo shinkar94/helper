@@ -6,26 +6,25 @@ import {ModalWindow} from "@/components/widgets/modal-window";
 import {LibType} from "@/app/store/LibStore";
 import useSWR, {useSWRConfig} from "swr";
 import {getMyHotLib} from "@/app/api/api-query/getMyHotLib";
-import {UserType} from "@/lib/types";
+import {ResponseHotLibType, UserType} from "@/lib/types";
 
 export const LibrariesContent = () => {
     const {cache} = useSWRConfig()
     const userData:UserType = cache.get('/api')?.data
     const modalStatus: boolean = useSwitchStore((state) => state.statusModalWindow)
-    const { data: myLib, isLoading, error } = useSWR<LibType[], any>(
+    const { data: myLib, isLoading, error } = useSWR<ResponseHotLibType[], any>(
         '/api/getHotLib',
         () => getMyHotLib({ idUser: userData.id }).then((response) => response.data)
     );
     const openModal = () =>{
         toggleModalWindow(true)
     }
-    const mappedLib = myLib && myLib.map((lib) => {
+    const mappedLib = myLib && myLib.map(({ _id:id, title, code }) => {
         return(
-            <div className={s.blockLink} key={lib.id}>
-                <p>{lib.id}</p>
-                <p className={s.titleLink}>{lib.title}</p>
+            <div className={s.blockLink} key={id}>
+                <p className={s.titleLink}>{title}</p>
                 <div className={s.resultBlock}>
-                    <p className={s.resultLink}>{lib.code}</p>
+                    <p className={s.resultLink}>{code}</p>
                 </div>
             </div>
         )
