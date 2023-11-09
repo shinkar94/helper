@@ -42,6 +42,14 @@ export type UserResponseType = {
     _id: string;
 }
 
+export type UserType = {
+    id: string,
+    email: string ,
+    fullName: string,
+    avatarUrl: string,
+    token: string
+}
+
 export type ResponseHotLibType = {
     "title": string,
     "code": string,

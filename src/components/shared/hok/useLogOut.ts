@@ -3,11 +3,13 @@ import {removeUser, toggleUser, useAuthStore} from "@/app/store/authStore";
 import {useSession, signIn, signOut} from 'next-auth/react'
 import {UserResponseType} from "@/lib/types";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
+import {useSWRConfig} from "swr";
 
 
 export const UseAuthUser = () => {
     const {data: session} = useSession()
     const {setLoading} = useAuthStore()
+    const {mutate} = useSWRConfig()
     async function logOut(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault()
         setLoading(true)
@@ -18,7 +20,7 @@ export const UseAuthUser = () => {
             });
             if (response.status) {
                 signOutGoogle()
-                removeUser()
+                mutate('/api', null, {revalidate: false});
             }
             console.log(response)
         } catch (error) {
