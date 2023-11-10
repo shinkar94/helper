@@ -27,7 +27,10 @@ export const useAuthStore = create(
                 avatarUrl: ''
             },
             toggleInitial: (status: boolean) =>
-                set({initialization: status}),
+                set((state) => {
+                    state.initialization = status
+                    state.loading = false
+                }),
             setLoading: (status: boolean) =>
                 set({loading: status}),
             toggleUser: (payload: PayloadType) => {
@@ -57,4 +60,4 @@ export const useAuthStore = create(
         })
     ))
 
-export const {toggleInitial, toggleUser, removeUser} = useAuthStore.getState()
+export const {toggleInitial, toggleUser, removeUser, setLoading} = useAuthStore.getState()
