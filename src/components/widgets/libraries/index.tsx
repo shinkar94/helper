@@ -3,18 +3,22 @@ import s from './libraries.module.scss';
 import {AdditionForm} from "@/components/widgets/libraries/addition-form";
 import {toggleModalWindow, useSwitchStore} from "@/app/store/switchStore";
 import {ModalWindow} from "@/components/widgets/modal-window";
-import {LibType} from "@/app/store/LibStore";
 import useSWR, {useSWRConfig} from "swr";
 import {getMyHotLib} from "@/app/api/api-query/getMyHotLib";
-import {ResponseHotLibType, UserType} from "@/lib/types";
+import {ResponseHotLibType} from "@/lib/types";
+import {useAuthStore} from "@/app/store";
+import {Loader} from "@/components/entities";
+import {Plus} from "@/components/shared";
 
 export const LibrariesContent = () => {
-    const {cache} = useSWRConfig()
-    const userData:UserType = cache.get('/api')?.data
+    const user = useAuthStore((state) => state.user)
+    const {cache, mutate} = useSWRConfig()
+    const myLib:ResponseHotLibType[] = cache.get('/api/getHotLib')?.data
+    console.log(cache.get('/api/getHotLib')?.data)
     const modalStatus: boolean = useSwitchStore((state) => state.statusModalWindow)
-    const { data: myLib, isLoading, error } = useSWR<ResponseHotLibType[], any>(
+    const { isLoading, error } = useSWR<ResponseHotLibType[], any>(
         '/api/getHotLib',
-        () => getMyHotLib({ idUser: userData.id }).then((response) => response.data)
+        () => getMyHotLib({ idUser: user.id }).then((response) => response.data)
     );
     const openModal = () =>{
         toggleModalWindow(true)
@@ -34,11 +38,12 @@ export const LibrariesContent = () => {
             <div className={s.btnPanel}>
                 <h3>Hot Libraries</h3>
                 <div className={s.panel}>
-                    <button onClick={openModal}>+ NEW</button>
+                    <button onClick={openModal}><Plus /> ADD</button>
+                    <button onClick={openModal}><Plus /> ALL</button>
                 </div>
             </div>
             <div className={s.content}>
-                {mappedLib}
+                {isLoading ? <Loader /> : mappedLib}
             </div>
             {modalStatus && <ModalWindow><AdditionForm /></ModalWindow>}
         </div>

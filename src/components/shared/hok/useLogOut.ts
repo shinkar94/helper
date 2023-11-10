@@ -1,7 +1,7 @@
 'use client'
-import {toggleInitial, useAuthStore} from "@/app/store/authStore";
+import {removeUser, toggleInitial, toggleUser, useAuthStore} from "@/app/store/authStore";
 import {signIn, signOut, useSession} from 'next-auth/react'
-import {UserResponseType} from "@/lib/types";
+import {TypeSignInSchema, UserResponseType} from "@/lib/types";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {useSWRConfig} from "swr";
 
@@ -21,8 +21,26 @@ export const UseAuthUser = () => {
             if (response.status) {
                 signOutGoogle()
                 mutate('/api', null, {revalidate: false});
+                removeUser()
             }
             console.log(response)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+    }
+    const sendDataUser = async (dataForm: TypeSignInSchema) => {
+        try {
+            setLoading(true)
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                body: JSON.stringify(dataForm),
+                headers: {"Content-Type": "application/json"},
+            });
+            const data: UserResponseType = await response.json();
+            const {_id, email, avatarUrl, fullName} = data
+            const user: PayloadType = {id: _id, email, avatarUrl, fullName}
+            toggleUser(user)
         } catch (error) {
             console.log(error);
             setLoading(false)
@@ -40,7 +58,8 @@ export const UseAuthUser = () => {
             const data: UserResponseType = await response.json();
             const { _id, email, avatarUrl, fullName } = data;
             const user: PayloadType = { id: _id, email, avatarUrl, fullName };
-            toggleInitial(true)
+            toggleUser(user)
+            setLoading(false)
         } catch (error) {
             console.log(error);
             setLoading(false)
@@ -55,5 +74,5 @@ export const UseAuthUser = () => {
         signIn()
     }
 
-    return {logOut, googleLogin,signOutGoogle,sendGoogleData, session}
+    return {logOut, googleLogin,signOutGoogle,sendGoogleData,sendDataUser, session}
 }

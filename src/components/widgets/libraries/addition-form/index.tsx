@@ -6,9 +6,11 @@ import {useAuthStore} from "@/app/store/authStore";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import React from "react";
 import {toggleModalWindow} from "@/app/store/switchStore";
-import {addOneLink, LibType} from "@/app/store/LibStore";
+import {LibType} from "@/app/store/LibStore";
+import {useSWRConfig} from "swr";
 
 export const AdditionForm = () =>{
+    const {cache,mutate} = useSWRConfig()
     const user: PayloadType = useAuthStore((state) => state.user)
     const {
         register,
@@ -29,7 +31,9 @@ export const AdditionForm = () =>{
             const data:ResponseHotLibType = await response.json();
             const {title, code, author, idAuthor, _id} = data
             const link: LibType = {title, code, author, idAuthor, id: _id}
-            addOneLink(link)
+            const prevData = cache.get('/api/getHotLib')?.data;
+            cache.set('/api/getHotLib', { data: [...prevData, link] });
+            mutate('/api/getHotLib');
             reset();
         } catch (error) {
             console.log(error);
