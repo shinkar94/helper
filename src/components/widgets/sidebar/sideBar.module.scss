@@ -10,6 +10,7 @@
     background: var(--gl-black-900);
     height: 100vh;
     transition: width 0.5s ease-in-out;
+    z-index: 3;
     &:hover{
         width: 140px;
     }

@@ -42,38 +42,83 @@
         flex-wrap: wrap;
         gap: 10px;
         padding: 10px 5px 0 5px;
-        .blockLink{
+        .containerLink{
             width: 240px;
-            border-radius: 4px 4px 8px 8px;
-            background: var(--gl-black-900);
-            box-shadow: 0px 2px 4px black;
-            cursor: pointer;
-
-            &:hover{
-                background: rgba(255, 0, 0, 0.42);
-            }
-            .titleLink{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 30px;
-                font-size: 18px;
-                background: linear-gradient(0deg, white 80%, black);
-                color: black;
-                margin: 0;
-                text-align: center;
-                overflow: hidden;
-                border-radius: 0 0 5px 5px;
-            }
-            .resultBlock{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                .resultLink{
-                    text-align: center;
-                    margin: 2px;
+            min-height: 65px;
+            position: relative;
+            .blockLink{
+                width: 240px;
+                border-radius: 4px 4px 8px 8px;
+                background: var(--gl-black-900);
+                box-shadow: 0 2px 4px black;
+                cursor: pointer;
+                &:hover {
+                    position: absolute;
+                    z-index: 2;
                 }
+                &:hover > .titleLink .title{
+                    height: auto;
+                }
+                .titleLink{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    //height: 30px;
+                    font-size: 18px;
+                    background: linear-gradient(0deg, white 80%, black);
+                    color: black;
+                    margin: 0;
+                    text-align: center;
+                    overflow: hidden;
+                    border-radius: 0 0 5px 5px;
+                    .linkBtn{
+                        display: flex;
+                        & button{
+                            width: 40px;
+                            height: 30px;
+                            background: linear-gradient(0deg,  var(--gl-black-900) 65%, black);
+                            cursor: pointer;
+                            border: none;
+                            & svg{
+                                width: 20px;
+                                height: 20px;
+                            }
+                            &:hover{
+                                background: linear-gradient(0deg,  var(--gl-gold) 65%, black);
+                            }
+                        }
+                        .startBtn{
+                            border-radius: 0 0 0 4px;
+                        }
+                        .endBtn{
+                            border-radius: 0 0 4px 0;
+                        }
+                    }
+                    .title{
+                        height: 31px;
+                        & p{
+                            margin: 5px;
+                        }
+                    }
+                    .openTitle{
+                        height: auto;
+                    }
+                }
+                .resultBlock{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    .resultLink{
+                        text-align: center;
+                        margin: 2px;
+                    }
+                }
+            }
+            .openBlockLink{
+                position: absolute;
+                z-index: 2;
             }
         }
     }
