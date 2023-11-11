@@ -58,3 +58,9 @@ export type ResponseHotLibType = {
     "_id": string,
     "__v": number
 }
+export type ResponseUserHotLibType = {
+    "idUser": string,
+    "arrayLibs": string[],
+    "_id": string,
+    "__v": number
+}
