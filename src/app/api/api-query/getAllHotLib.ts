@@ -1,10 +1,10 @@
-import {ResponseUserHotLibType} from "@/lib/types";
+import {ResponseHotLibType} from "@/lib/types";
 
-export const getAllLibs = async (): Promise<ResponseUserHotLibType[] | null> => {
+export const getAllLibs = async (): Promise<ResponseHotLibType[]> => {
     try {
         const response = await fetch("/api/lib-link/get-all-link");
-        const data: ResponseUserHotLibType[] | null = await response.json();
-        return data;
+        // const data: ResponseHotLibType[] = await response.json();
+        return await response.json();
     } catch (e) {
         console.log(e);
         throw e;

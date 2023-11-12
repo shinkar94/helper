@@ -27,7 +27,7 @@ export const useHotLibs = (nameLib: NameLibType) => {
             )
         })
         setResultLink(updateLib)
-    }, [myLib]);
+    }, [myLib, allLib]);
 
     const transferLink = async (id: string) => {
         const response: ResponseHotLibType | {error: string} = await TransferLink(id, user.id)
