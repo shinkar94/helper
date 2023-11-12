@@ -3,12 +3,12 @@ import {ResponseUserHotLibType} from "@/lib/types";
 import {getAllLibs} from "@/app/api/api-query/getAllHotLib";
 import {Loader} from "@/components/entities";
 import s from "@/components/widgets/libraries/libraries.module.scss";
-import {CodeIcon, DeleteIcon, DownIcon, EditIcon, StaticCopyIcon, UpIcon} from "@/components/shared";
+import {CodeIcon, DeleteIcon, DownIcon, DownloadIcon, EditIcon, StaticCopyIcon, UpIcon} from "@/components/shared";
 import {useHotLibs} from "@/components/shared/hok/useHotLibs";
 
 export const MappedAllLibs = () => {
     const {data, isLoading} = useSWR<ResponseUserHotLibType[] | null>('/api/getAllHotLib', getAllLibs);
-    const {resultLink, openLink, closeLik, copyText} = useHotLibs('All')
+    const {resultLink, openLink, closeLink, copyText, transferLink} = useHotLibs('All')
     return (
         isLoading ? <Loader/> :
             resultLink && resultLink.map(({_id: id, title, code, open}) => {
@@ -18,12 +18,11 @@ export const MappedAllLibs = () => {
                             <div className={s.titleLink}>
                                 <div className={s.linkBtn}>
                                     <button className={s.startBtn}><CodeIcon /></button>
-                                    <button><DeleteIcon /></button>
-                                    <button><EditIcon /></button>
+                                    <button onClick={()=>{transferLink(id)}}><DownloadIcon /></button>
                                     <button onClick={()=>{copyText(code)}}><StaticCopyIcon /></button>
                                     {!open
                                         ? <button className={s.endBtn} onClick={()=>{openLink(id)}}><DownIcon /></button>
-                                        : <button className={s.endBtn} onClick={()=>{closeLik(id)}}><UpIcon /></button>}
+                                        : <button className={s.endBtn} onClick={()=>{closeLink(id)}}><UpIcon /></button>}
                                 </div>
                                 <div className={`${s.title} ${open && s.openTitle}`}><p>{title}</p></div>
                             </div>
