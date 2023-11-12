@@ -16,7 +16,7 @@ export const MappedMyLibs = ({user} : PropsType) => {
         () => getMyHotLib({ idUser: user.id }).then((response) => response.data)
     );
 
-    const {resultLink, openLink, closeLik} = useHotLibs()
+    const {resultLink, openLink, closeLik, copyText} = useHotLibs('My')
     return (
         isLoading ? <Loader /> :
             resultLink && resultLink.map(({ _id:id, title, code , open}) => {
@@ -28,7 +28,7 @@ export const MappedMyLibs = ({user} : PropsType) => {
                                 <button className={s.startBtn}><CodeIcon /></button>
                                 <button><DeleteIcon /></button>
                                 <button><EditIcon /></button>
-                                <button><StaticCopyIcon /></button>
+                                <button onClick={()=>{copyText(code)}}><StaticCopyIcon /></button>
                                 {!open
                                     ? <button className={s.endBtn} onClick={()=>{openLink(id)}}><DownIcon /></button>
                                     : <button className={s.endBtn} onClick={()=>{closeLik(id)}}><UpIcon /></button>}
