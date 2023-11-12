@@ -7,7 +7,9 @@ import {CodeIcon, DownIcon, DownloadIcon, StaticCopyIcon, UpIcon} from "@/compon
 import {useHotLibs} from "@/components/shared/hok/useHotLibs";
 
 export const MappedAllLibs = () => {
-    const {isLoading} = useSWR<ResponseHotLibType[]>('/api/getAllHotLib', getAllLibs);
+    const {isLoading} = useSWR<ResponseHotLibType[]>('/api/getAllHotLib', getAllLibs, {
+        revalidateOnMount: true
+    });
 
 
     const {resultLink, openLink, closeLink, copyText, transferLink} = useHotLibs('All')
