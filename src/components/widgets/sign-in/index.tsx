@@ -11,6 +11,7 @@ import Gear from "@/components/shared/icon/shes1.png";
 import {GoogleIcon} from "@/components/shared";
 import {UseAuthUser} from "@/components/shared/hok";
 import {Loader} from "@/components/entities";
+import {toast} from "react-toastify";
 
 
 export const SignIn = () => {
@@ -20,7 +21,7 @@ export const SignIn = () => {
 
     useEffect(() => {
         if (session && session.user?.email && initialization === false) {
-            sendGoogleData(session.user.email)
+           sendGoogleData(session.user.email)
         }
     }, [session])
 
@@ -50,8 +51,8 @@ export const SignIn = () => {
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <h3>SignIn</h3>
-                        {errors.email && (<p>{`${errors.email.message}`}</p>)}
-                        {errors.password && (<p>{`${errors.password.message}`}</p>)}
+                        {errors.email && toast.error(`${errors.email.message}`)}
+                        {errors.password && toast.error(`${errors.password.message}`)}
                         <input type={'email'}
                                {...register('email', {
                                    required: "Email is required"

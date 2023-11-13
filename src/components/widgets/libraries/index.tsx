@@ -6,6 +6,7 @@ import {ModalWindow} from "@/components/widgets/modal-window";
 import {useAuthStore} from "@/app/store";
 import {Plus} from "@/components/shared";
 import {MappedAllLibs, MappedMyLibs} from "@/components/widgets/libraries/ui";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const LibrariesContent = () => {
     const user = useAuthStore((state) => state.user)
@@ -20,15 +21,14 @@ export const LibrariesContent = () => {
     const openMyLink = () =>{
         setNewShow('My')
     }
-    const mappedAllLink = []
     return (
         <div className={s.wrapper}>
             <div className={s.btnPanel}>
-                <h3>Hot Libraries</h3>
+                <h3><span>&#128293;</span>Hot Libraries</h3>
                 <div className={s.panel}>
                     <button onClick={openModal}><Plus /> ADD</button>
-                    <button onClick={openMyLink}><Plus /> My</button>
-                    <button onClick={openAllLink}><Plus /> ALL</button>
+                    <button onClick={openMyLink} className={`${showLinks === 'My' && s.activeBtn}`}><Plus /> My</button>
+                    <button onClick={openAllLink} className={`${showLinks === 'All' && s.activeBtn}`}><Plus /> ALL</button>
                 </div>
             </div>
             <div className={s.content}>
