@@ -4,11 +4,12 @@ import {signIn, signOut, useSession} from 'next-auth/react'
 import {TypeSignInSchema, UserResponseType} from "@/lib/types";
 import {PayloadType} from "@/app/service/generate-token/generateToken";
 import {useSWRConfig} from "swr";
+import {toast} from "react-toastify";
 
 
 export const UseAuthUser = () => {
     const {data: session} = useSession()
-    const {setLoading} = useAuthStore()
+    const {user: stateUser,setLoading} = useAuthStore()
     const {mutate} = useSWRConfig()
     async function logOut(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault()
@@ -31,18 +32,20 @@ export const UseAuthUser = () => {
     }
     const sendDataUser = async (dataForm: TypeSignInSchema) => {
         try {
-            setLoading(true)
-            const response = await fetch("/api/auth/login", {
-                method: "POST",
-                body: JSON.stringify(dataForm),
-                headers: {"Content-Type": "application/json"},
-            });
-            const data: UserResponseType = await response.json();
-            const {_id, email, avatarUrl, fullName} = data
-            const user: PayloadType = {id: _id, email, avatarUrl, fullName}
-            toggleUser(user)
+            if(!stateUser.id){
+                setLoading(true)
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    body: JSON.stringify(dataForm),
+                    headers: {"Content-Type": "application/json"},
+                });
+                const data: UserResponseType = await response.json();
+                const {_id, email, avatarUrl, fullName} = data
+                const user: PayloadType = {id: _id, email, avatarUrl, fullName}
+                toggleUser(user)
+            }
         } catch (error) {
-            console.log(error);
+            toast.error(`${error}`)
             setLoading(false)
         }
     }
@@ -50,18 +53,20 @@ export const UseAuthUser = () => {
         setLoading(true)
         const dataForm = {email}
         try {
-            const response = await fetch("/api/auth/loginGoogle", {
-                method: "POST",
-                body: JSON.stringify(dataForm),
-                headers: { "Content-Type": "application/json" },
-            });
-            const data: UserResponseType = await response.json();
-            const { _id, email, avatarUrl, fullName } = data;
-            const user: PayloadType = { id: _id, email, avatarUrl, fullName };
-            toggleUser(user)
-            setLoading(false)
+            if(!stateUser.id){
+                const response = await fetch("/api/auth/loginGoogle", {
+                    method: "POST",
+                    body: JSON.stringify(dataForm),
+                    headers: { "Content-Type": "application/json" },
+                });
+                const data: UserResponseType = await response.json();
+                const { _id, email, avatarUrl, fullName } = data;
+                const user: PayloadType = { id: _id, email, avatarUrl, fullName };
+                toggleUser(user)
+                setLoading(false)
+            }
         } catch (error) {
-            console.log(error);
+            toast.error(`${error}`)
             setLoading(false)
         }
     }

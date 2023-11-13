@@ -3,6 +3,7 @@ import {useSWRConfig} from "swr";
 import {ResponseHotLibType} from "@/lib/types";
 import {TransferLink} from "@/app/api/api-query";
 import {useAuthStore} from "@/app/store";
+import {toast} from "react-toastify";
 
 type UpdateLibType = ResponseHotLibType & {
     open: boolean
@@ -38,30 +39,34 @@ export const useHotLibs = (nameLib: NameLibType) => {
         const response: ResponseHotLibType | {error: string} = await TransferLink(id, user.id)
         if("error" in response){
             console.log('error')
+            toast.error(`Error adding: ${response.error}`)
         }else{
             cache.set('/api/getHotLib', { data: [...myLib, response] });
-            mutate('/api/getHotLib');
-            console.log(response)
+            await mutate('/api/getHotLib');
+            toast.success("Successfully Added!")
         }
 
     }
     const openLink = (id: string) => {
-        const updateLib = resultLink.map(link => link._id === id ? {...link, open: true} : {...link, open: false})
+        const updateLib: UpdateLibType[] = resultLink.map(link => link._id === id ? {...link, open: true} : {...link, open: false})
         setResultLink(updateLib)
     }
     const closeLink = (id: string) => {
-        const updateLib = resultLink.map(link => link._id === id ? {...link, open: false} : link)
+        const updateLib: UpdateLibType[] = resultLink.map(link => link._id === id ? {...link, open: false} : link)
         setResultLink(updateLib)
     }
     const copyText = (text: string, types: string) =>{
         if(types){
             navigator.clipboard.writeText(text + ' && ' + types)
+            toast.success("Copied to clipboard")
         }else{
             navigator.clipboard.writeText(text)
+            toast.success("Copied to clipboard")
         }
     }
     const copyOneString = (text: string) => {
         navigator.clipboard.writeText(text)
+        toast.success("Copied to clipboard")
     }
 
     return {resultLink, closeLink, openLink, copyText, transferLink, copyOneString}

@@ -8,6 +8,7 @@ import React from "react";
 import {toggleModalWindow} from "@/app/store/switchStore";
 import {LibType} from "@/app/store/LibStore";
 import {useSWRConfig} from "swr";
+import {toast} from "react-toastify";
 
 export const AdditionForm = () =>{
     const {cache,mutate} = useSWRConfig()
@@ -34,13 +35,14 @@ export const AdditionForm = () =>{
             const prevData = cache.get('/api/getHotLib')?.data;
             const allLib: ResponseHotLibType[] = cache.get('/api/getAllHotLib')?.data
             cache.set('/api/getHotLib', { data: [...prevData, link] });
-            mutate('/api/getHotLib');
+            await mutate('/api/getHotLib');
 
             cache.set('/api/getAllHotLib', { data: [...allLib, link] });
-            mutate('/api/getAllHotLib');
+            await mutate('/api/getAllHotLib');
+            toast.success('Successfully added to User Link')
             reset();
         } catch (error) {
-            console.log(error);
+            toast.error(`${error}`);
         }
     };
     const closeModal = () => {
@@ -48,7 +50,9 @@ export const AdditionForm = () =>{
     }
     return (
         <div className={s.blockForm}>
-            {errors.title && (<p>{`${errors.title.message}`}</p>)}
+            {errors.title && toast.error(`Error in title: ${errors.title.message}`)}
+            {errors.code && toast.error(`Error in code init: ${errors.code.message}`)}
+            {errors.typesCode && toast.error(`Error in types: ${errors.typesCode.message}`)}
             <button className={s.closeBtn} onClick={closeModal}>X</button>
             <h4>Add new link</h4>
             <form onSubmit={handleSubmit(onSubmit)}>
