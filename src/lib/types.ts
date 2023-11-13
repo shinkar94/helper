@@ -22,7 +22,8 @@ export const setLinkLib = z.object({
     title: z.string().refine(value => /^[a-zA-Zа-яА-Я+_ \-]+$/u.test(value), {
         message: 'The "title" field must contain only English and Russian letters or (+,-,_)',
     }),
-    code: z.string()
+    code: z.string(),
+    typesCode: z.string()
 })
 
 export type TypeSignInSchema = z.infer<typeof signInSchema>
@@ -53,6 +54,7 @@ export type UserType = {
 export type ResponseHotLibType = {
     "title": string,
     "code": string,
+    "typesCode": string,
     "author": string,
     "idAuthor": string,
     "_id": string,

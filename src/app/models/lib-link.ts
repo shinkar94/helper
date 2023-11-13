@@ -11,6 +11,9 @@ const LinkSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    typesCode: {
+        type: String
+    },
     author: {
         type: String,
         required: true
@@ -21,5 +24,5 @@ const LinkSchema = new mongoose.Schema({
     }
 });
 
-const LinkLib = mongoose.models.LinkLib || mongoose.model("LinkLib", LinkSchema)
-export default LinkLib
+const LinkHotLib = mongoose.models.LinkHotLib || mongoose.model("LinkHotLib", LinkSchema)
+export default LinkHotLib

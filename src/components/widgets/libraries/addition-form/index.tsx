@@ -29,8 +29,8 @@ export const AdditionForm = () =>{
                 headers: { "Content-Type": "application/json" },
             });
             const data:ResponseHotLibType = await response.json();
-            const {title, code, author, idAuthor, _id} = data
-            const link: LibType = {title, code, author, idAuthor, id: _id}
+            const {title, code,typesCode, author, idAuthor, _id} = data
+            const link: LibType = {title, code, typesCode,  author, idAuthor, id: _id}
             const prevData = cache.get('/api/getHotLib')?.data;
             const allLib: ResponseHotLibType[] = cache.get('/api/getAllHotLib')?.data
             cache.set('/api/getHotLib', { data: [...prevData, link] });
@@ -54,6 +54,7 @@ export const AdditionForm = () =>{
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" {...register('title')} placeholder={'Title'}/>
                 <input type="text" {...register('code')} placeholder={'Code'}/>
+                <input type="text" {...register('typesCode')} placeholder={'Types'}/>
                 <button type={'submit'} disabled={isSubmitting}>Add</button>
             </form>
         </div>
