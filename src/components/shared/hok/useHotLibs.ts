@@ -4,6 +4,8 @@ import {ResponseHotLibType} from "@/lib/types";
 import {TransferLink} from "@/app/api/api-query";
 import {useAuthStore} from "@/app/store";
 import {toast} from "react-toastify";
+import {DeleteLink} from "@/app/api/api-query/hot-lib";
+import {ResponseDeleteType} from "@/app/api/api-query/hot-lib/deleteLink";
 
 type UpdateLibType = ResponseHotLibType & {
     open: boolean
@@ -69,5 +71,20 @@ export const useHotLibs = (nameLib: NameLibType) => {
         toast.success("Copied to clipboard")
     }
 
-    return {resultLink, closeLink, openLink, copyText, transferLink, copyOneString}
+    const deleteMyLink = async (idLink: string, idUser: string) => {
+        const response: ResponseDeleteType  = await DeleteLink(idLink, idUser)
+        if("error" in response){
+            toast.error(response.error)
+        }else{
+            const newMyLib = myLib.filter(el => el._id === idLink)
+            const newAllLib = allLib.filter(el => el._id === idLink)
+            cache.set('/api/getHotLib', { data: [...newMyLib] })
+            cache.set('/api/getAllHotLib', { data: [...newAllLib] })
+            await mutate('/api/getHotLib');
+            await mutate('/api/getAllHotLib');
+            toast.success(response.success)
+        }
+    }
+
+    return {resultLink, closeLink, openLink, copyText, transferLink, copyOneString, deleteMyLink}
 }
