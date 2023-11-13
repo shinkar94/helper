@@ -16,7 +16,7 @@ export const MappedMyLibs = ({user}: PropsType) => {
         () => getMyHotLib({idUser: user.id}).then((response) => response.data)
     );
 
-    const {resultLink, openLink, closeLink, copyText, copyOneString} = useHotLibs('My')
+    const {resultLink, openLink, closeLink, copyText, copyOneString,deleteMyLink} = useHotLibs('My')
     return (
         isLoading ? <Loader/> :
             (resultLink && resultLink.length >= 1
@@ -27,7 +27,7 @@ export const MappedMyLibs = ({user}: PropsType) => {
                                 <div className={s.titleLink}>
                                     <div className={s.linkBtn}>
                                         <button className={s.startBtn}><CodeIcon/></button>
-                                        <button><DeleteIcon/></button>
+                                        <button onClick={()=>{deleteMyLink(id, user.id)}}><DeleteIcon/></button>
                                         <button><EditIcon/></button>
                                         <button onClick={() => {
                                             copyText(code, typesCode)
