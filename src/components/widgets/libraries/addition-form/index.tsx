@@ -32,8 +32,12 @@ export const AdditionForm = () =>{
             const {title, code, author, idAuthor, _id} = data
             const link: LibType = {title, code, author, idAuthor, id: _id}
             const prevData = cache.get('/api/getHotLib')?.data;
+            const allLib: ResponseHotLibType[] = cache.get('/api/getAllHotLib')?.data
             cache.set('/api/getHotLib', { data: [...prevData, link] });
             mutate('/api/getHotLib');
+
+            cache.set('/api/getAllHotLib', { data: [...allLib, link] });
+            mutate('/api/getAllHotLib');
             reset();
         } catch (error) {
             console.log(error);
