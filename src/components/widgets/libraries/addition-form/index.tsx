@@ -32,13 +32,16 @@ export const AdditionForm = () =>{
             const data:ResponseHotLibType = await response.json();
             const {title, code,typesCode, author, idAuthor, _id} = data
             const link: LibType = {title, code, typesCode,  author, idAuthor, id: _id}
-            const prevData = cache.get('/api/getHotLib')?.data;
+            const myLib: ResponseHotLibType[] = cache.get('/api/getHotLib')?.data;
             const allLib: ResponseHotLibType[] = cache.get('/api/getAllHotLib')?.data
-            cache.set('/api/getHotLib', { data: [...prevData, link] });
-            await mutate('/api/getHotLib');
-
-            cache.set('/api/getAllHotLib', { data: [...allLib, link] });
-            await mutate('/api/getAllHotLib');
+            if(myLib && myLib.length >= 1){
+                cache.set('/api/getHotLib', { data: [...myLib, link] });
+                await mutate('/api/getHotLib');
+            }
+            if(allLib && allLib.length >= 1){
+                cache.set('/api/getAllHotLib', { data: [...allLib, link] });
+                await mutate('/api/getAllHotLib');
+            }
             toast.success('Successfully added to User Link')
             reset();
         } catch (error) {

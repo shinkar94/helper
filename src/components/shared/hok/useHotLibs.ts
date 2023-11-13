@@ -17,8 +17,8 @@ export const useHotLibs = (nameLib: NameLibType) => {
     const myLib: ResponseHotLibType[] = cache.get('/api/getHotLib')?.data
     const allLib: ResponseHotLibType[] = cache.get('/api/getAllHotLib')?.data
     const [resultLink, setResultLink] = useState<UpdateLibType[]>([])
+    let updateLib: UpdateLibType[] = []
     useEffect(() => {
-        let updateLib: UpdateLibType[] = []
         if(myLib && myLib.length >= 1 && nameLib === 'My'){
             updateLib = myLib.map(link => {
                 return (
@@ -76,12 +76,23 @@ export const useHotLibs = (nameLib: NameLibType) => {
         if("error" in response){
             toast.error(response.error)
         }else{
-            const newMyLib = myLib.filter(el => el._id === idLink)
-            const newAllLib = allLib.filter(el => el._id === idLink)
-            cache.set('/api/getHotLib', { data: [...newMyLib] })
-            cache.set('/api/getAllHotLib', { data: [...newAllLib] })
-            await mutate('/api/getHotLib');
-            await mutate('/api/getAllHotLib');
+            if(myLib && myLib.length >= 1){
+                const newMyLib =  myLib.filter(el => el._id === idLink)
+                cache.set('/api/getHotLib', { data: [...newMyLib] })
+                await mutate('/api/getHotLib');
+                let updateLib: UpdateLibType[] =  myLib.map(link => {
+                    return (
+                        {...link, open: false}
+                    )
+                })
+                setResultLink(updateLib)
+            }
+
+            if(allLib && allLib.length >= 1 ){
+                const newAllLib = allLib.filter(el => el._id === idLink)
+                cache.set('/api/getAllHotLib', { data: [...newAllLib] })
+                await mutate('/api/getAllHotLib');
+            }
             toast.success(response.success)
         }
     }
