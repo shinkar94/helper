@@ -15,17 +15,22 @@ export const useHotLibs = (nameLib: NameLibType) => {
     const allLib: ResponseHotLibType[] = cache.get('/api/getAllHotLib')?.data
     const [resultLink, setResultLink] = useState<UpdateLibType[]>([])
     useEffect(() => {
-        const updateLib: UpdateLibType[] = nameLib === 'My'
-            ? myLib && myLib.map(link => {
-            return (
-                {...link, open: false}
-            )
-        })
-            : allLib && allLib.map(link => {
-            return (
-                {...link, open: false}
-            )
-        })
+        let updateLib: UpdateLibType[] = []
+        if(myLib && myLib.length >= 1 && nameLib === 'My'){
+            updateLib = myLib.map(link => {
+                return (
+                    {...link, open: false}
+                )
+            })
+        }else if(allLib && allLib.length >= 1 && nameLib === 'All'){
+            updateLib = allLib.map(link => {
+                return (
+                    {...link, open: false}
+                )
+            })
+        }else{
+            updateLib = []
+        }
         setResultLink(updateLib)
     }, [myLib, allLib]);
 

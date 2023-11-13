@@ -10,37 +10,45 @@ import {useHotLibs} from "@/components/shared/hok/useHotLibs";
 type PropsType = {
     user: PayloadType
 }
-export const MappedMyLibs = ({user} : PropsType) => {
-    const { isLoading, error } = useSWR<ResponseHotLibType[], any>(
+export const MappedMyLibs = ({user}: PropsType) => {
+    const {isLoading, error} = useSWR<ResponseHotLibType[], any>(
         '/api/getHotLib',
-        () => getMyHotLib({ idUser: user.id }).then((response) => response.data)
+        () => getMyHotLib({idUser: user.id}).then((response) => response.data)
     );
 
     const {resultLink, openLink, closeLink, copyText} = useHotLibs('My')
     return (
-        isLoading ? <Loader /> :
-            resultLink && resultLink.map(({ _id:id, title, code , open}) => {
-            return(
-                <div className={s.containerLink} key={id}>
-                    <div className={`${s.blockLink} ${open && s.openBlockLink}`}>
-                        <div className={s.titleLink}>
-                            <div className={s.linkBtn}>
-                                <button className={s.startBtn}><CodeIcon /></button>
-                                <button><DeleteIcon /></button>
-                                <button><EditIcon /></button>
-                                <button onClick={()=>{copyText(code)}}><StaticCopyIcon /></button>
-                                {!open
-                                    ? <button className={s.endBtn} onClick={()=>{openLink(id)}}><DownIcon /></button>
-                                    : <button className={s.endBtn} onClick={()=>{closeLink(id)}}><UpIcon /></button>}
+        isLoading ? <Loader/> :
+            (resultLink && resultLink.length >= 1
+                ? resultLink.map(({_id: id, title, code, open}) => {
+                    return (
+                        <div className={s.containerLink} key={id}>
+                            <div className={`${s.blockLink} ${open && s.openBlockLink}`}>
+                                <div className={s.titleLink}>
+                                    <div className={s.linkBtn}>
+                                        <button className={s.startBtn}><CodeIcon/></button>
+                                        <button><DeleteIcon/></button>
+                                        <button><EditIcon/></button>
+                                        <button onClick={() => {
+                                            copyText(code)
+                                        }}><StaticCopyIcon/></button>
+                                        {!open
+                                            ? <button className={s.endBtn} onClick={() => {
+                                                openLink(id)
+                                            }}><DownIcon/></button>
+                                            : <button className={s.endBtn} onClick={() => {
+                                                closeLink(id)
+                                            }}><UpIcon/></button>}
+                                    </div>
+                                    <div className={`${s.title} ${open && s.openTitle}`}><p>{title}</p></div>
+                                </div>
+                                <div className={s.resultBlock}>
+                                    <p className={s.resultLink}>{open && code}</p>
+                                </div>
                             </div>
-                            <div className={`${s.title} ${open && s.openTitle}`}><p>{title}</p></div>
                         </div>
-                        <div className={s.resultBlock}>
-                            <p className={s.resultLink}>{open && code}</p>
-                        </div>
-                    </div>
-                </div>
-            )
-        })
+                    )
+                })
+                : <>You don't have hot libraries yet</>)
     )
 }

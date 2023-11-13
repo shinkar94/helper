@@ -10,7 +10,7 @@ type PropsType = {
     user: PayloadType
 }
 export const MappedAllLibs = ({user} : PropsType) => {
-    const {data, isLoading, mutate} = useSWR<ResponseHotLibType[]>(
+    const {isLoading} = useSWR<ResponseHotLibType[]>(
         '/api/getAllHotLib',
         () => getAllLibs({ idUser: user.id }).then((response) => response.data))
 
@@ -18,7 +18,8 @@ export const MappedAllLibs = ({user} : PropsType) => {
     const {resultLink, openLink, closeLink, copyText, transferLink} = useHotLibs('All')
     return (
         isLoading ? <Loader/> :
-            resultLink && resultLink.map(({_id: id, title, code, open}) => {
+            (resultLink && resultLink.length >= 1
+                ? resultLink.map(({_id: id, title, code, open}) => {
                 return (
                     <div className={s.containerLink} key={id}>
                         <div className={`${s.blockLink} ${open && s.openBlockLink}`}>
@@ -48,5 +49,6 @@ export const MappedAllLibs = ({user} : PropsType) => {
                     </div>
                 )
             })
+            : <>The list of hot libraries is empty</>)
     )
 }
