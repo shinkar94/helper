@@ -1,10 +1,10 @@
 import {NextResponse} from "next/server";
-import Link from "@/app/models/lib-link";
+import LinkHotLib from "@/app/models/lib-link";
 import {ResponseHotLibType} from "@/lib/types";
 
 export async function POST(req: Request) {
     try {
-        const LinkLib: ResponseHotLibType[] | any[] = await Link.find();
+        const LinkLib: ResponseHotLibType[] | any[] = await LinkHotLib.find();
         if(LinkLib){
             return NextResponse.json([...LinkLib]);
         }

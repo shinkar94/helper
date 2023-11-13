@@ -15,11 +15,11 @@ export const MappedAllLibs = ({user} : PropsType) => {
         () => getAllLibs({ idUser: user.id }).then((response) => response.data))
 
 
-    const {resultLink, openLink, closeLink, copyText, transferLink} = useHotLibs('All')
+    const {resultLink, openLink, closeLink, copyText, transferLink, copyOneString} = useHotLibs('All')
     return (
         isLoading ? <Loader/> :
             (resultLink && resultLink.length >= 1
-                ? resultLink.map(({_id: id, title, code, open}) => {
+                ? resultLink.map(({_id: id, title, code,typesCode, open}) => {
                 return (
                     <div className={s.containerLink} key={id}>
                         <div className={`${s.blockLink} ${open && s.openBlockLink}`}>
@@ -30,7 +30,7 @@ export const MappedAllLibs = ({user} : PropsType) => {
                                         transferLink(id)
                                     }}><DownloadIcon/></button>
                                     <button onClick={() => {
-                                        copyText(code)
+                                        copyText(code, typesCode)
                                     }}><StaticCopyIcon/></button>
                                     {!open
                                         ? <button className={s.endBtn} onClick={() => {
@@ -43,7 +43,14 @@ export const MappedAllLibs = ({user} : PropsType) => {
                                 <div className={`${s.title} ${open && s.openTitle}`}><p>{title}</p></div>
                             </div>
                             <div className={s.resultBlock}>
-                                <p className={s.resultLink}>{open && code}</p>
+                                {open && <div className={s.resultCode}>
+                                    <button onClick={()=>copyOneString(code)}><StaticCopyIcon /></button>
+                                    <p className={s.resultLink}>{code}</p>
+                                </div>}
+                                {open && typesCode && <div className={s.resultCode}>
+                                    <button onClick={()=>copyOneString(typesCode)}><StaticCopyIcon /></button>
+                                    <p className={s.resultLink}>{typesCode}</p>
+                                </div>}
                             </div>
                         </div>
                     </div>

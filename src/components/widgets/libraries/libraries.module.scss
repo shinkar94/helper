@@ -110,10 +110,32 @@
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    .resultLink{
-                        text-align: center;
-                        margin: 2px;
+                    .resultCode{
+                        padding: 4px;
+                        display: flex;
+                        width: 100%;
+                        justify-content: flex-start;
+                        gap: 4px;
+                        & button{
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            border-radius: 4px;
+                            & svg{
+                                width: 20px;
+                                height: 20px;
+                            }
+                            &:hover{
+                                background: var(--gl-gold);
+                            }
+                        }
+                        .resultLink{
+                            margin: 2px;
+                            color: white;
+                        }
+
                     }
+
                 }
             }
             .openBlockLink{

@@ -1,5 +1,5 @@
 import {NextResponse} from "next/server";
-import Link from "@/app/models/lib-link";
+import LinkHotLib from "@/app/models/lib-link";
 import UserLinkLib from "@/app/models/user-hot-libs";
 import {ResponseHotLibType, ResponseUserHotLibType} from "@/lib/types";
 
@@ -10,7 +10,7 @@ export async function POST(req: Request){
         let LinkLib: ResponseHotLibType | any[]
         if(userLib){
             const idMyLib = userLib[0].arrayLibs
-            LinkLib = await Link.find({ _id: { $in: idMyLib } })
+            LinkLib = await LinkHotLib.find({ _id: { $in: idMyLib } })
             return NextResponse.json([...LinkLib]);
         }else{
             LinkLib = []

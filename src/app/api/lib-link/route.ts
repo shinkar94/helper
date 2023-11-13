@@ -1,15 +1,16 @@
 import {NextResponse} from "next/server";
-import LinkLib from "@/app/models/lib-link";
+import LinkHotLib from "@/app/models/lib-link";
 import UserLinkLib from "@/app/models/user-hot-libs";
 import {ResponseHotLibType, ResponseUserHotLibType} from "@/lib/types";
 
 export async function POST(req: Request){
     try {
-        const {title,code, author, idAuthor} = await req.json()
+        const {title,code, author, idAuthor, typesCode} = await req.json()
         // send linkLibs
-        const doc = new LinkLib({
+        const doc = new LinkHotLib({
             title,
             code,
+            typesCode,
             author,
             idAuthor
         })

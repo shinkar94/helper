@@ -53,9 +53,16 @@ export const useHotLibs = (nameLib: NameLibType) => {
         const updateLib = resultLink.map(link => link._id === id ? {...link, open: false} : link)
         setResultLink(updateLib)
     }
-    const copyText = (text: string) =>{
+    const copyText = (text: string, types: string) =>{
+        if(types){
+            navigator.clipboard.writeText(text + ' && ' + types)
+        }else{
+            navigator.clipboard.writeText(text)
+        }
+    }
+    const copyOneString = (text: string) => {
         navigator.clipboard.writeText(text)
     }
 
-    return {resultLink, closeLink, openLink, copyText, transferLink}
+    return {resultLink, closeLink, openLink, copyText, transferLink, copyOneString}
 }

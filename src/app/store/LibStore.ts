@@ -5,6 +5,7 @@ import {devtools} from "zustand/middleware";
 export type LibType = {
     "title": string,
     "code": string,
+    "typesCode" : string,
     "author": string,
     "idAuthor": string,
     "id": string,
