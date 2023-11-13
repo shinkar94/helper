@@ -2,7 +2,7 @@ import {NextResponse} from "next/server";
 import Link from "@/app/models/lib-link";
 import {ResponseHotLibType} from "@/lib/types";
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
     try {
         const LinkLib: ResponseHotLibType[] | any[] = await Link.find();
         if(LinkLib){

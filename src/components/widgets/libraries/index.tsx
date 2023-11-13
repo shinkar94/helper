@@ -32,7 +32,7 @@ export const LibrariesContent = () => {
                 </div>
             </div>
             <div className={s.content}>
-                {showLinks === 'My' ? <MappedMyLibs user={user} /> : <MappedAllLibs />}
+                {showLinks === 'My' ? <MappedMyLibs user={user} /> : <MappedAllLibs user={user}/>}
             </div>
             {modalStatus && <ModalWindow><AdditionForm /></ModalWindow>}
         </div>

@@ -5,15 +5,14 @@ import {Loader} from "@/components/entities";
 import s from "@/components/widgets/libraries/libraries.module.scss";
 import {CodeIcon, DownIcon, DownloadIcon, StaticCopyIcon, UpIcon} from "@/components/shared";
 import {useHotLibs} from "@/components/shared/hok/useHotLibs";
-import {useEffect} from "react";
-
-export const MappedAllLibs = () => {
-    const {data, isLoading, mutate} = useSWR<ResponseHotLibType[]>('/api/getAllHotLib', getAllLibs, {
-        revalidateOnMount: true
-    });
-    useEffect(() => {
-        mutate()
-    }, [data]);
+import {PayloadType} from "@/app/service/generate-token/generateToken";
+type PropsType = {
+    user: PayloadType
+}
+export const MappedAllLibs = ({user} : PropsType) => {
+    const {data, isLoading, mutate} = useSWR<ResponseHotLibType[]>(
+        '/api/getAllHotLib',
+        () => getAllLibs({ idUser: user.id }).then((response) => response.data))
 
 
     const {resultLink, openLink, closeLink, copyText, transferLink} = useHotLibs('All')
