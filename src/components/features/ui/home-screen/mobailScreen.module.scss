@@ -1,0 +1,80 @@
+.containerScreen{
+  position: fixed;
+  bottom: 10%;
+  width: 80%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  padding: 5px;
+  border-radius: 10px;
+  .blockScreen{
+    .downIcon{
+      font-size: 2.25rem;
+      position: absolute;
+      bottom: -50px;
+      right: 50%;
+      transform: translateX(-50%) rotate(90deg);
+      color: var(--gl-gold);
+      z-index: 10;
+      animation: bounce 1s infinite;
+    }
+    .screenContent{
+      position: relative;
+      background-color: var(--primary-color);
+      padding: 1rem;
+      height: 100%;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      text-align: center;
+      .closeBtn{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: var(--gl-white);
+        font-size: 24px;
+        font-weight: bold;
+        background: none;
+        border: 0;
+      }
+      .notBtn{
+        background: none;
+        font-size: 18px;
+        border: 2px solid white;
+        color: white;
+        padding: 4px;
+
+      }
+      .clickBlock{
+        display: flex;
+        gap: 2px;
+        justify-content: center;
+        align-items: center;
+        .pointIcon{
+          font-size: 24px;
+        }
+      }
+      .homeScreen{
+        display: flex;
+        flex-direction: column;
+        .homeScreenInf{
+          display: flex;
+          gap: 4px;
+          align-items: center;
+          .homeIcon{
+            font-size: 24px;
+          }
+        }
+      }
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+  }
+}

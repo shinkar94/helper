@@ -3,6 +3,7 @@ import {useAuthStore} from "@/app/store/authStore";
 import s from './homeContent.module.scss'
 import Image from "next/image";
 import {UserDefault} from "@/components/shared";
+import {AddToHomeScreen} from "@/components/features";
 
 export const HomeContent = () => {
     const user = useAuthStore((state) => state.user)
@@ -20,6 +21,7 @@ export const HomeContent = () => {
                         <p>{user.email}</p>
                     </div>
                 </div>
+                <AddToHomeScreen />
             </div>
         </div>
     )
