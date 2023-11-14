@@ -3,6 +3,7 @@ import './globals.css'
 import {Inter} from 'next/font/google'
 import {ReactNode} from "react";
 import Providers from "@/providers/providers";
+import {Head} from "next/document";
 
 
 const inter = Inter({subsets: ['latin']})
@@ -17,6 +18,10 @@ interface RootLayoutProps {
 export default function RootLayout({children}: RootLayoutProps) {
     return (
         <html lang="en">
+        <head>
+            <link rel="manifest" href="../../public/manifest.json" />
+            <title>Helper</title>
+        </head>
         <body className={inter.className}>
             <Providers>
                 {children}
