@@ -10,17 +10,19 @@ const inter = Inter({subsets: ['latin']})
 interface RootLayoutProps {
     children: ReactNode;
 }
+
 export default function RootLayout({children}: RootLayoutProps) {
+
     return (
         <html lang="en">
         <head>
-            <link rel="manifest" href="/manifest.json" />
+            <link rel="manifest" href="/manifest.json"/>
             <title>Helper</title>
         </head>
         <body className={inter.className}>
-            <Providers>
-                {children}
-            </Providers>
+        <Providers>
+            {children}
+        </Providers>
         </body>
         </html>
     )

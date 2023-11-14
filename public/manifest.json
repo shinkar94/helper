@@ -1,7 +1,7 @@
 {
   "name": "Helper",
   "short_name": "Helper",
-  "theme_color": "#00ff00",
+  "theme_color": "#000000",
   "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "any",
