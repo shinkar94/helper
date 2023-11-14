@@ -4,5 +4,11 @@ const nextConfig = {
         domains: ['cdn.pixabay.com', 'lh3.googleusercontent.com'],
     },
 }
+const withPWA = require('next-pwa')({
+    dest: 'public',
+    register: true,
+    skipWaiting: true,
+    disable: process.env.NEXT_DEV_PROJECT === 'development',
+})
 
-module.exports = nextConfig
+module.exports = withPWA(nextConfig)
