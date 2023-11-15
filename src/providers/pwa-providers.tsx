@@ -7,17 +7,17 @@ type Props = {
     children: React.ReactNode;
 };
 export const InstallPromptProvider = ({ children }: Props) => {
-    const [promptInstall, setPromptInstall] = useState(null);
+    const [promptInstall, setPromptInstall] = useState<BeforeInstallPromptEvent | null>(null);
 
     useEffect(() => {
-        const handler = (e: Event) => {
+        const handler = (e: BeforeInstallPromptEvent) => {
             e.preventDefault();
             setPromptInstall(e);
         };
 
-        window.addEventListener("beforeinstallprompt", handler);
+        window.addEventListener("beforeinstallprompt", handler as EventListener);
 
-        return () => window.removeEventListener("beforeinstallprompt", handler);
+        return () => window.removeEventListener("beforeinstallprompt", handler as EventListener);
     }, []);
 
     return <InstallPromptContext.Provider value={promptInstall}>{children}</InstallPromptContext.Provider>;
