@@ -3,7 +3,8 @@ import {useAuthStore} from "@/app/store/authStore";
 import s from './homeContent.module.scss'
 import Image from "next/image";
 import {UserDefault} from "@/components/shared";
-import {AddToHomeScreen, InstallPWA} from "@/components/features";
+import {AddToHomeScreen} from "@/components/features";
+import {useEffect} from "react";
 
 export const HomeContent = () => {
     const user = useAuthStore((state) => state.user)
@@ -21,7 +22,7 @@ export const HomeContent = () => {
                         <p>{user.email}</p>
                     </div>
                 </div>
-                <InstallPWA />
+                {/*<InstallPWA />*/}
                 <AddToHomeScreen />
             </div>
         </div>

@@ -5,6 +5,7 @@ import { HiDotsVertical } from 'react-icons/hi'
 import { MdAddToHomeScreen } from 'react-icons/md'
 import { ImArrowUp } from 'react-icons/im'
 import s from './mobailScreen.module.scss'
+import {InstallPWA} from "@/components/features";
 
 interface Props {
     closePrompt: () => void;
@@ -35,6 +36,7 @@ export default function AddToMobileChrome(props: Props) {
                     </div>
                 </div>
                 <button className={s.notBtn} onClick={doNotShowAgain}>Don&apos;t show again</button>
+                <InstallPWA />
             </div>
         </div>
     )

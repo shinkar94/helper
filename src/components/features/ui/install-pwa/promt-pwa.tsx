@@ -33,8 +33,8 @@ export const InstallPWA: React.FC = () => {
     }
 
     return (
-        <Button aria-label='Install app' className='link-button' id='setup_button' title='Install app' onClick={onClick}>
-            Install
+        <Button aria-label='Install app' variant={'primary'} className='link-button' id='setup_button' title='Install app' onClick={onClick}>
+            Install this App
         </Button>
     );
 };

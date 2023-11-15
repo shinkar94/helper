@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 10%;
   width: 80%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.52);
   z-index: 3;
   padding: 5px;
   border-radius: 10px;
@@ -45,7 +45,10 @@
         color: white;
         padding: 4px;
 
-
+      }
+      .primary{
+        background: var(--gl-gold);
+        color: white;
       }
       .clickBlock{
         display: flex;
