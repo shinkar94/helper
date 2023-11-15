@@ -2,6 +2,7 @@ import {SessionProvider} from "next-auth/react";
 import {createContext, ReactNode} from "react";
 import {useAuthStore} from "@/app/store/authStore";
 import {useLibStore} from "@/app/store/LibStore";
+import {InstallPromptProvider} from "@/providers/pwa-providers";
 
 interface Props{
     children: ReactNode
@@ -15,7 +16,9 @@ const Providers = ({children}: Props) => {
         <SessionProvider>
             <AuthContext.Provider value={authData}>
                 <HotLibContext.Provider value={hotLibData}>
-                    {children}
+                    <InstallPromptProvider>
+                        {children}
+                    </InstallPromptProvider>
                 </HotLibContext.Provider>
             </AuthContext.Provider>
         </SessionProvider>
