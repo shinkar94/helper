@@ -5,7 +5,7 @@ import useUserAgent from "@/components/shared/hok/useUserAgent";
 import s from './mobailScreen.module.scss'
 
 const ModuleLoading = () => <p className="animate-bounce text-white font-bold">Loading...</p>;
-const AddToIosSafari = dynamic(() => import('./AddToMobileChrome'), { loading: () => <ModuleLoading /> });
+const AddToIosSafari = dynamic(() => import('./AddToIosSafari'), { loading: () => <ModuleLoading /> });
 const AddToMobileChrome = dynamic(() => import('./AddToMobileChrome'), { loading: () => <ModuleLoading /> });
 const AddToMobileFirefox = dynamic(() => import('./AddToMobileChrome'), { loading: () => <ModuleLoading /> });
 const AddToMobileFirefoxIos = dynamic(() => import('./AddToMobileChrome'), { loading: () => <ModuleLoading /> });

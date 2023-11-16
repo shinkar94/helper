@@ -1,21 +1,22 @@
 .containerScreen{
   position: fixed;
-  bottom: 10%;
+  bottom: 0;
   width: 80%;
-  background-color: rgba(0, 0, 0, 0.52);
+  background-color: var(--gl-black-900);
   z-index: 3;
   padding: 5px;
   border-radius: 10px;
   .blockScreen{
-    .downIcon{
-      font-size: 2.25rem;
-      position: absolute;
-      bottom: -50px;
-      right: 50%;
-      transform: translateX(-50%) rotate(90deg);
-      color: var(--gl-gold);
-      z-index: 10;
-      animation: bounce 1s infinite;
+    p{
+      margin: 4px;
+    }
+    & button{
+      background: var(--gl-black);
+      margin: 10px;
+    }
+    & svg{
+      width: 30px;
+      height: 30px;
     }
     .screenContent{
       position: relative;
@@ -37,6 +38,7 @@
         font-weight: bold;
         background: none;
         border: 0;
+        margin: 0;
       }
       .notBtn{
         background: none;
@@ -70,14 +72,6 @@
             font-size: 24px;
           }
         }
-      }
-    }
-    @keyframes bounce {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-20px);
       }
     }
   }
