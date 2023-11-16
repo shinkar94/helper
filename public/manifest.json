@@ -9,17 +9,62 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "/icons-192.png",
+      "src": "/helper-192.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/helper-192.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/helper-192.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/helper-192.png",
+      "type": "image/png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/helper-256.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/helper-512.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/helper-192.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/helper-256.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "/helper-512.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/helper-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/icons-256.png",
+      "src": "/helper-256.png",
       "type": "image/png",
       "sizes": "256x256"
     },
     {
-      "src": "/icons-512.png",
+      "src": "/helper-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
