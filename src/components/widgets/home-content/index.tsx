@@ -20,7 +20,7 @@ export const HomeContent = () => {
                         <h3>{user.fullName}</h3>
                         <p>{user.email}</p>
                     </div>
-                    <p>test cache</p>
+                    <p>test cache 2</p>
                 </div>
                 <AddToHomeScreen />
             </div>

@@ -99,3 +99,88 @@ define(['./workbox-3576cac3'], (function (workbox) { 'use strict';
 
 }));
 //# sourceMappingURL=sw.js.map
+const CACHE_NAME = 'my-app-cache-v2';
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+      caches.open(CACHE_NAME)
+          .then(cache => cache.addAll([
+            '/index.html',
+            '/styles.css',
+            '/script.js',
+            // Добавьте другие файлы вашего приложения, которые должны быть закэшированы
+          ]))
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+      caches.keys()
+          .then(cacheNames => {
+            return Promise.all(
+                cacheNames.filter(name => name !== CACHE_NAME)
+                    .map(name => caches.delete(name))
+            );
+          })
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+      caches.match(event.request)
+          .then(response => {
+            if (response) {
+              // Возвращаем закэшированный ресурс
+              return response;
+            }
+
+            // Клонируем запрос, так как он может быть использован только один раз
+            const requestClone = event.request.clone();
+
+            return fetch(requestClone)
+                .then(response => {
+                  if (!response || response.status !== 200 || response.type !== 'basic') {
+                    // Ответ не является успешным, просто его возвращаем
+                    return response;
+                  }
+
+                  // Клонируем ответ, так как он может быть использован только один раз
+                  const responseClone = response.clone();
+
+                  // Открываем кэш и сохраняем в него полученный ресурс
+                  caches.open(CACHE_NAME)
+                      .then(cache => {
+                        cache.put(event.request, responseClone);
+                      });
+
+                  return response;
+                });
+          })
+  );
+});
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'CHECK_FOR_UPDATES') {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => {
+              return cache.match('/index.html')
+                  .then(response => {
+                    return fetch('/index.html')
+                        .then(newResponse => {
+                          if (response.headers.get('last-modified') !== newResponse.headers.get('last-modified')) {
+                            // Кэш устарел, обновляем приложение
+                            cache.put('/index.html', newResponse.clone());
+                            self.clients.matchAll()
+                                .then(clients => {
+                                  clients.forEach(client => {
+                                    client.postMessage({ type: 'UPDATE_AVAILABLE' });
+                                  });
+                                });
+                          }
+                        });
+                  });
+            })
+    );
+  }
+});
