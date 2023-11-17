@@ -76,6 +76,7 @@ export const HomeContent = () => {
                     <div className={s.infoUser}>
                         <h3>{user.fullName}</h3>
                         <p>{user.email}</p>
+                        <p>test send query</p>
                     </div>
                 </div>
                 <AddToHomeScreen/>
