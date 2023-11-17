@@ -17,13 +17,8 @@ export default function useUserAgent() {
             setUserAgentString(userAgentString);
             let userAgent;
 
-            /**
-             * Parse user agent string to determine browser
-             * The order of the if statements is important because some browsers
-             * have multiple matches in their user agent string
-             */
-            if (userAgentString.indexOf('SamsungBrowser') > -1) {
-                userAgent = 'SamsungBrowser';
+            if (userAgentString.indexOf('Safari') > -1) {
+                userAgent = 'Safari';
             } else if (userAgentString.indexOf('Firefox') > -1) {
                 userAgent = 'Firefox';
             } else if (userAgentString.indexOf('FxiOS') > -1) {
@@ -35,7 +30,7 @@ export default function useUserAgent() {
             } else if (userAgentString.indexOf('Safari') > -1) {
                 userAgent = 'Safari';
             } else {
-                userAgent = 'unknown';
+                userAgent = 'Chrome';
             }
             setUserAgent(userAgent);
 
