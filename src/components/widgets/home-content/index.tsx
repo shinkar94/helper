@@ -9,41 +9,40 @@ import {useEffect, useState} from "react";
 
 export const HomeContent = () => {
     const user = useAuthStore((state) => state.user)
-    const [showRefreshButton, setShowRefreshButton] = useState(false);
-    const [version, setVersion] = useState('')
-    const [scriptUrl, setScriptUrl] = useState('')
+    // const [showRefreshButton, setShowRefreshButton] = useState(false);
+    // const [version, setVersion] = useState('')
+    // const [scriptUrl, setScriptUrl] = useState('')
 
 
     const wb = new Workbox('/sw.js');
 
-    const checkUrl = async (url:string) =>{
-        const response = await fetch(`${url}`)
-        console.log(response)
-    }
+    // const checkUrl = async (url:string) =>{
+    //     const response = await fetch(`${url}`)
+    //     console.log(response)
+    // }
 
-    useEffect(()=>{
-        const scripts = document.getElementsByTagName('script');
-        // console.log("script", scripts[0].src)
-        setScriptUrl(scripts[0].src)
-        const currentScript = scripts[scripts.length - 1];
-        // console.log("current script", currentScript.src)
-    }, [])
+    // useEffect(()=>{
+    //     const scripts = document.getElementsByTagName('script');
+    //     // console.log("script", scripts[0].src)
+    //     setScriptUrl(scripts[0].src)
+    //     const currentScript = scripts[scripts.length - 1];
+    //     // console.log("current script", currentScript.src)
+    // }, [])
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            scriptUrl && checkUrl(scriptUrl);
-        }, 10000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [scriptUrl]);
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         scriptUrl && checkUrl(scriptUrl);
+    //     }, 10000);
+    //
+    //     return () => {
+    //         clearInterval(interval);
+    //     };
+    // }, [scriptUrl]);
 
     const handleCacheUpdate = (event:WorkboxMessageEvent) => {
         if (event.data.type === 'CACHE_UPDATED') {
             const {updatedURL} = event.data.payload;
             alert(`A newer version of ${updatedURL} is available!`);
-            setShowRefreshButton(true);
         }
     }
 
@@ -76,7 +75,6 @@ export const HomeContent = () => {
                     <div className={s.infoUser}>
                         <h3>{user.fullName}</h3>
                         <p>{user.email}</p>
-                        <p>test send query</p>
                     </div>
                 </div>
                 <AddToHomeScreen/>
