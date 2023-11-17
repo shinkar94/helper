@@ -21,7 +21,7 @@ const COOKIE_NAME = 'addToHomeScreenPrompt';
 export const AddToHomeScreen = () => {
     const [displayPrompt, setDisplayPrompt] = useState<AddToHomeScreenPromptType>('');
     const { userAgent, isMobile, isStandalone, isIOS } = useUserAgent();
-
+    alert(userAgent)
     const closePrompt = () => {
         setDisplayPrompt('');
     };

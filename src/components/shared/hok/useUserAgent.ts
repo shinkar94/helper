@@ -17,17 +17,9 @@ export default function useUserAgent() {
             setUserAgentString(userAgentString);
             let userAgent;
 
-            if (userAgentString.indexOf('Safari') > -1) {
-                userAgent = 'Safari';
-            } else if (userAgentString.indexOf('Firefox') > -1) {
-                userAgent = 'Firefox';
-            } else if (userAgentString.indexOf('FxiOS') > -1) {
-                userAgent = 'FirefoxiOS';
-            } else if (userAgentString.indexOf('CriOS') > -1) {
-                userAgent = 'ChromeiOS';
-            } else if (userAgentString.indexOf('Chrome') > -1) {
+            if(userAgentString.indexOf('Chrome') > -1){
                 userAgent = 'Chrome';
-            } else if (userAgentString.indexOf('Safari') > -1) {
+            }else if (userAgentString.indexOf('Safari') > -1) {
                 userAgent = 'Safari';
             } else {
                 userAgent = 'Chrome';
