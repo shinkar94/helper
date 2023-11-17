@@ -13,9 +13,7 @@ export const HomeContent = () => {
     const wb = new Workbox('/sw.js');
 
     const handleCacheUpdate = (event:WorkboxMessageEvent) => {
-        console.log("start EVENT")
         if (event.data.type === 'CACHE_UPDATED') {
-            console.log("OPEN CHANGE")
             const {updatedURL} = event.data.payload;
             alert(`A newer version of ${updatedURL} is available!`);
         }
@@ -42,7 +40,6 @@ export const HomeContent = () => {
                         <h3>{user.fullName}</h3>
                         <p>{user.email}</p>
                     </div>
-                    <p>test cache 4</p>
                 </div>
                 <AddToHomeScreen/>
             </div>
