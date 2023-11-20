@@ -1,0 +1,1 @@
+export {AddNewExapmle} from './add-new-exapmle'
