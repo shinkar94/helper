@@ -1,1 +1,1 @@
-export {AddToHomeScreen, InstallPWA} from './ui'
+export {AddToHomeScreen, InstallPWA, AddNewExapmle} from './ui'
