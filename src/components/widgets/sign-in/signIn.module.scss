@@ -93,7 +93,60 @@
       }
     }
     .phoneAuth{
-      display: none;
+      .inputPhoneBlock{
+        display: flex;
+        gap: 10px;
+        & input{
+          width: 140px;
+          height: 30px;
+          border-radius: 5px;
+          margin-bottom: 5px;
+          font-size: 18px;
+          color: var(--gl-white);
+          background-color: rgba(63, 63, 63, 0.66);
+          box-shadow: 0 0 5px #000;
+          border: 0;
+          &::placeholder{
+            color: #6b6b6b;
+          }
+        }
+      }
+      .btnPhonePanel{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-top: 5px;
+        & button{
+          height: 30px;
+          width: 140px;
+          font-size: 16px;
+          color: #fff;
+          cursor: pointer;
+          background-color: var(--gl-gold-opacity);
+          border-radius: 5px;
+          border: 0;
+          &:hover{
+            background-image: linear-gradient(#D8514D 0%,#B92C28 100%);
+            animation: aut 0.5s linear 0s forwards;
+          }
+        }
+        .btnPanel{
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 10px;
+          & button{
+            width: 140px;
+          }
+        }
+        .bottomPanel{
+          display: flex;
+          justify-content: center;
+          & button{
+            background-color: #356735;
+          }
+        }
+      }
     }
     .mehanics{
       position: absolute;

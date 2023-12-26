@@ -30,11 +30,12 @@ yarn-error.log*
 /public/
 # local env files
 .env*.local
-#PWA
-./public/sw.js
-./public/sw.js.map
-./public/workbox-*.js
-./public/workbox-*.js.map
+# Files PWA
+/public/sw.js
+/public/workbox-*.js
+/public/worker-.js
+/public/*.map
+/public/fallback-*.js
 # vercel
 .vercel
 

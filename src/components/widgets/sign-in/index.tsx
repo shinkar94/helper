@@ -126,17 +126,20 @@ export const SignIn = () => {
                         <div className={s.googleBtn} onClick={googleLogin}><GoogleIcon/><p>Registration with
                             Google</p></div>
                     </div>
+                    <p className={s.authTitle}>Auth with phone</p>
                     <div className={s.phoneAuth}>
-                        <input type="text" onChange={onSetNumber} value={number} placeholder={"+375332987765"}/>
-                        <input type="text" onChange={onSetCode} value={code} placeholder={"SMS Code"}/>
-                        <div className={s.btnPanel}>
-                            <button className={s.btnSend} id='send-code-button' onClick={handleSendCode}>send number</button>
+                        <div className={s.inputPhoneBlock}>
+                            <input type="text" onChange={onSetNumber} value={number} placeholder={"+375332987765"}/>
+                            <input type="text" onChange={onSetCode} value={code} placeholder={"SMS Code"}/>
                         </div>
-                        <div className={s.btnPanel}>
-                            <button className={s.btnSend} onClick={handleVerifyCode}>send code</button>
-                        </div>
-                        <div className={s.btnPanel}>
-                            <button className={s.btnSend} onClick={handleResendCode}>resend code</button>
+                        <div className={s.btnPhonePanel}>
+                            <div className={s.btnPanel}>
+                                <button className={s.btnSend} id='send-code-button' onClick={handleSendCode}>Send number</button>
+                                <button className={s.btnSend} onClick={handleVerifyCode}>Send code</button>
+                            </div>
+                            <div className={s.bottomPanel}>
+                                <button className={s.btnSend} onClick={handleResendCode}>Resend Code</button>
+                            </div>
                         </div>
                         <div className={s.recaptcha} id='recapthca'></div>
                     </div>
