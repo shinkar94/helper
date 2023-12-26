@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signInSchema, TypeSignInSchema} from "@/lib/types";
@@ -12,13 +12,63 @@ import {GoogleIcon} from "@/components/shared";
 import {UseAuthUser} from "@/components/shared/hok";
 import {Loader} from "@/components/entities";
 import {toast} from "react-toastify";
-
+import firebase from '../../../../firebase'
 
 export const SignIn = () => {
     const { initialization } = useAuthStore()
     const loading = useAuthStore((state) => state.loading)
     const {sendGoogleData, googleLogin,sendDataUser, session} = UseAuthUser()
+    const [number, setNumber] = useState('')
+    const [code, setCode] = useState('')
+    const [verificationId, setVerificationId] = useState('');
+    const [saveRecaptchaVerifier, setRecaptchaVerifier] = useState<firebase.auth.RecaptchaVerifier | null>(null);
+    // const auth = getAuth(app)
+    const handleSendCode = () => {
+        const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('send-code-button', {
+            size: 'invisible',
+        });
 
+        firebase.auth().signInWithPhoneNumber(number, recaptchaVerifier)
+            .then((verificationId) => {
+                setVerificationId(verificationId.verificationId);
+                setRecaptchaVerifier(recaptchaVerifier)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+    const handleVerifyCode = () => {
+        const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, code);
+
+        firebase.auth().signInWithCredential(credential)
+            .then((userCredential) => {
+                userCredential.user?.getIdToken().then((data_token) => {
+                    console.log(data_token)
+                })
+                // console.log(userCredential.user?.getIdToken())
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+    const handleResendCode = () => {
+        const recaptchaContainer = document.getElementById('recapthca');
+        if (recaptchaContainer) {
+            recaptchaContainer.innerHTML = '';
+            saveRecaptchaVerifier && saveRecaptchaVerifier?.clear()
+        }
+        const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recapthca', {
+            size: 'invisible',
+        });
+
+        firebase.auth().signInWithPhoneNumber(number, recaptchaVerifier)
+            .then((verificationId) => {
+                setVerificationId(verificationId.verificationId);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
     useEffect(() => {
         if (session && session.user?.email && initialization === false) {
            sendGoogleData(session.user.email)
@@ -36,6 +86,12 @@ export const SignIn = () => {
         await sendDataUser(dataForm)
         reset();
     };
+    const onSetNumber = (e: ChangeEvent<HTMLInputElement>) => {
+        setNumber(e.currentTarget.value)
+    }
+    const onSetCode = (e: ChangeEvent<HTMLInputElement>) => {
+        setCode(e.currentTarget.value)
+    }
 
     return (
         loading ? <Loader/> :
@@ -69,6 +125,20 @@ export const SignIn = () => {
                     <div className={s.googleAuth}>
                         <div className={s.googleBtn} onClick={googleLogin}><GoogleIcon/><p>Registration with
                             Google</p></div>
+                    </div>
+                    <div className={s.phoneAuth}>
+                        <input type="text" onChange={onSetNumber} value={number} placeholder={"+375332987765"}/>
+                        <input type="text" onChange={onSetCode} value={code} placeholder={"SMS Code"}/>
+                        <div className={s.btnPanel}>
+                            <button className={s.btnSend} id='send-code-button' onClick={handleSendCode}>send number</button>
+                        </div>
+                        <div className={s.btnPanel}>
+                            <button className={s.btnSend} onClick={handleVerifyCode}>send code</button>
+                        </div>
+                        <div className={s.btnPanel}>
+                            <button className={s.btnSend} onClick={handleResendCode}>resend code</button>
+                        </div>
+                        <div className={s.recaptcha} id='recapthca'></div>
                     </div>
                 </div>
             </div>
