@@ -66,3 +66,31 @@ export type ResponseUserHotLibType = {
     "_id": string,
     "__v": number
 }
+// POSTS
+export type NewPostCodeType = {
+    dataPost: DataCodeType[]
+    title: string
+    author: string
+}
+export type DataCodeType = {
+    tag: string
+    text: string
+}
+export type ResponseCodePosts = {
+    title: string;
+    author: string;
+    dataCode: {
+        tag: string;
+        text: string;
+        _id: string;
+    }[];
+    rating: number;
+    _id: string;
+    __v: number;
+}
+export type CodePostsState = ResponseCodePosts & {show: boolean}
+export type ResponseDateCodeType = {
+    tag: string
+    text: string
+    _id: string;
+}

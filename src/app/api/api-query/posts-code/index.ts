@@ -1,0 +1,1 @@
+export {AddCodeMutation} from './addNewMyPost'

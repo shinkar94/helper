@@ -12,6 +12,7 @@ body{
     /*margin-left: 45px;*/
 }
 :root {
+    --index: calc(1vw + 1vh);
     --gl-color: rgb(215,215,215);
     --gl-black-900: #252A30;
     --gl-black: #30353B;

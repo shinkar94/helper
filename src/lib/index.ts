@@ -1,0 +1,1 @@
+export type {DataCodeType, NewPostCodeType, ResponseCodePosts, CodePostsState} from './types'
