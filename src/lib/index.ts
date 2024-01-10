@@ -1,1 +1,1 @@
-export type {DataCodeType, NewPostCodeType, ResponseCodePosts, CodePostsState} from './types'
+export type {DataCodeType, NewPostCodeType, ResponseCodePosts, TextareaType} from './types'

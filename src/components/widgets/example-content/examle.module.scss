@@ -109,12 +109,34 @@
         .openContent{
           display: inline;
         }
-        .authorPosts{
-          color: var(--gl-gold);
-          text-align: right;
-          padding-right: 10px;
-          font-family: cursive;
+        .bottomPanel{
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          .btnBottom{
+            flex: 60%;
+            display: flex;
+            gap: 4px;
+            .crudBtn{
+              height: 30px;
+              cursor: pointer;
+              background: var(--gl-violet-600);
+              color: var(--gl-white);
+              border: 0;
+              border-radius: 4px;
+              &:hover{
+                background: linear-gradient(0deg, var(--gl-violet-600), red);
+              }
+            }
+          }
+          .authorPosts{
+            color: var(--gl-gold);
+            text-align: right;
+            padding-right: 10px;
+            font-family: cursive;
+          }
         }
+
       }
     }
   }

@@ -1,82 +1,32 @@
 import s from './addNewExample.module.scss'
-import {ChangeEvent, FC, useState} from "react";
-import {useAuthStore} from "@/app/store";
-import {v1 as uuidv1} from 'uuid';
-import {CodePostsState, DataCodeType, ResponseCodePosts} from "@/lib";
-import {AddCodeMutation} from "@/app/api/api-query/posts-code";
-import {toast} from "react-toastify";
-import {useSWRConfig} from "swr";
+import {FC} from "react";
+import {TextareaType} from "@/lib";
+import {usePosts} from "@/components/shared/hok";
 
 type Props = {
     active: boolean
     closeCallBack: () => void
 }
-type TextareaType = {
-    id: string
-    tagName: string
-    text: string
-}
 export const AddNewExapmle: FC<Props> = ({active, closeCallBack}) => {
-    const {cache,mutate} = useSWRConfig()
-    const user = useAuthStore((state) => state.user)
-    const [textareas, setTextareas] = useState<TextareaType[]>([]);
-    const [titleValue, setTitleValue] = useState("");
-    const addH1 = () => {
-        setTextareas([...textareas, {id: uuidv1(), tagName: 'redactorblock blcok-h1', text: ''}]);
-    };
-
-    const addH2 = () => {
-        setTextareas([...textareas, {id: uuidv1(), tagName: 'redactorblock blcok-h2', text: ''}]);
-    };
-
-    const addH3 = () => {
-        setTextareas([...textareas, {id: uuidv1(), tagName: 'redactorblock blcok-h3', text: ''}]);
-    };
-
-    const addText = () => {
-        setTextareas([...textareas, {id: uuidv1(), tagName: 'redactorblock blcok-text', text: ''}]);
-    };
-
-    const addCode = () => {
-        setTextareas([...textareas, {id: uuidv1(), tagName: 'redactorblock blcok-code', text: ''}]);
-    };
-    const sendNewPost = async () => {
-        const dataPost: DataCodeType[] = textareas.map(el => {
-            return {
-                tag: el.tagName,
-                text: el.text
-            }
-        })
-        const title = titleValue;
-        const author = user.email;
-        const response: ResponseCodePosts | { error: string } = await AddCodeMutation(dataPost, title, author)
-        if ("error" in response) {
-            toast.error(response.error)
-        } else {
-            const dataCacheCode:ResponseCodePosts[]  = cache.get('/api/getAllPosts')?.data
-            if(dataCacheCode.length > 0){
-                const formatData: CodePostsState[] = dataCacheCode.map((el: ResponseCodePosts) => ({...el, show: false}))
-                const formatResponse: CodePostsState = {...response, show: false}
-                cache.set('/api/getAllPosts', {data: [...formatData, formatResponse]})
-                await mutate('/api/getAllPosts')
-                toast("posts updates")
-            }
-        }
-        console.log("Response Data", response)
-    }
-    const addTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitleValue(e.currentTarget.value)
-    }
-    const closeTextarea = (id: string) => {
-        setTextareas(textareas.filter(el => el.id !== id));
-    }
-    const addTextNewText = (id: string, e: ChangeEvent<HTMLTextAreaElement>) => {
-        setTextareas(textareas.map(el => el.id === id ? {...el, text: e.currentTarget.value} : el))
-    }
+    const {
+        addText,
+        addH3,
+        addH2,
+        addH1,
+        addCode,
+        addTitle,
+        setTextareas,
+        closeTextarea,
+        sendNewPost,
+        addTextNewText,
+        titleValue,
+        textareas
+    } = usePosts()
     const closeModal = () => {
         setTextareas([])
         closeCallBack()
     }
+
     return (
         <div className={`${s.containerRedactor} ${active && s.active}`}>
             <div className={s.wrapperContainer}>

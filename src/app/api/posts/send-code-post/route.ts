@@ -8,7 +8,9 @@ export async function POST(req: Request){
             dataCode: dataPost,
             title: title,
             author: author,
-            rating: 0
+            rating: 0,
+            show: false,
+            topic: "Next"
         })
         const post = await doc.save()
         return NextResponse.json(post);

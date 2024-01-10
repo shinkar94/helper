@@ -22,7 +22,7 @@ export const SignIn = () => {
     const [code, setCode] = useState('')
     const [verificationId, setVerificationId] = useState('');
     const [saveRecaptchaVerifier, setRecaptchaVerifier] = useState<firebase.auth.RecaptchaVerifier | null>(null);
-    // const auth = getAuth(app)
+
     const handleSendCode = () => {
         const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('send-code-button', {
             size: 'invisible',

@@ -23,7 +23,16 @@ const PostsCodeSchema = new mongoose.Schema({
     ],
     rating: {
         type: Number
+    },
+    show: {
+        type: Boolean
+    },
+    topic: {
+        type: String,
+        required: true
     }
+},{
+    timestamps: true,
 });
 
 const PostCode = mongoose.models.PostsExampleCode || mongoose.model("PostsExampleCode", PostsCodeSchema)

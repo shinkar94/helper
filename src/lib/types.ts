@@ -85,12 +85,21 @@ export type ResponseCodePosts = {
         _id: string;
     }[];
     rating: number;
+    show: boolean;
+    topic: string;
     _id: string;
+    createdAt: string,
+    updatedAt: string,
     __v: number;
 }
-export type CodePostsState = ResponseCodePosts & {show: boolean}
+
 export type ResponseDateCodeType = {
     tag: string
     text: string
     _id: string;
+}
+export type TextareaType = {
+    id: string
+    tagName: string
+    text: string
 }
