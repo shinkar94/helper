@@ -88,9 +88,6 @@ devDependencies:
   '@types/jsonwebtoken':
     specifier: ^9.0.2
     version: 9.0.2
-  '@types/mongodb':
-    specifier: ^4.0.7
-    version: 4.0.7
   '@types/mongoose':
     specifier: ^5.11.97
     version: 5.11.97
@@ -2269,19 +2266,6 @@ packages:
   /@types/minimist@1.2.4:
     resolution: {integrity: sha512-Kfe/D3hxHTusnPNRbycJE1N77WHDsdS4AjUYIzlDzhDrS47NrwuL3YW4VITxwR7KCVpzwgy4Rbj829KSSQmwXQ==}
     dev: false
-
-  /@types/mongodb@4.0.7:
-    resolution: {integrity: sha512-lPUYPpzA43baXqnd36cZ9xxorprybxXDzteVKCPAdp14ppHtFJHnXYvNpmBvtMUTb5fKXVv6sVbzo1LHkWhJlw==}
-    deprecated: mongodb provides its own types. @types/mongodb is no longer needed.
-    dependencies:
-      mongodb: 5.8.1
-    transitivePeerDependencies:
-      - '@aws-sdk/credential-providers'
-      - '@mongodb-js/zstd'
-      - kerberos
-      - mongodb-client-encryption
-      - snappy
-    dev: true
 
   /@types/mongoose@5.11.97:
     resolution: {integrity: sha512-cqwOVYT3qXyLiGw7ueU2kX9noE8DPGRY6z8eUxudhXY8NZ7DMKYAxyZkLSevGfhCX3dO/AoX5/SO9lAzfjon0Q==}
