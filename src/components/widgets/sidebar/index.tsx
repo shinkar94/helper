@@ -8,7 +8,7 @@ import {
     HomeIcon,
     LibIcon,
     LinkIcon,
-    SettingsIcon,
+    SettingsIcon, TestingIcon,
     TodoIcon,
     UserDefault
 } from "@/components/shared";
@@ -36,6 +36,7 @@ export const Sidebar = () => {
                 <div className={s.link}><Link href={'/Page/library'} ><div className={s.linkSvg}><LibIcon/></div> Hot Libraries</Link></div>
                 <div className={s.link}><Link href={'/Page/example'} ><div className={s.linkSvg}><CodeIcon/></div> Example</Link></div>
                 <div className={s.link}><Link href={'/Page/link'} ><div className={s.linkSvg}><LinkIcon/></div> Link</Link></div>
+                <div className={s.link}><Link href={'/Page/testing'} ><div className={s.linkSvg}><TestingIcon/></div> Test</Link></div>
                 <div className={s.link}><Link href={'/Page/todos'} ><div className={s.linkSvg}><TodoIcon/></div> Todos</Link></div>
                 <div className={s.link}><Link href={''} ><div className={s.linkSvg}><ChatIcon/></div> Chat</Link></div>
             </div>
