@@ -161,7 +161,9 @@ export const VideoRecorder = () => {
                 <button onClick={stopRecording}>Остановить запись</button>
                 <button onClick={showVideoUrl}>Показать ссылку на видео</button>
                 <button onClick={showAudioUrl}>Показать ссылку на аудио</button>
-                <button onMouseDown={startAudioHandler}
+                <button onTouchStart={startAudioHandler}
+                        onTouchEnd={stopAudioHandler}
+                        onMouseDown={startAudioHandler}
                         onMouseUp={stopAudioHandler}
                         className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}
                 >
