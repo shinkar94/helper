@@ -3,18 +3,18 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {toast} from "react-toastify";
 import s from './videoRecorder.module.scss'
 import {CircularProgressBar} from "@/components/shared/ui";
-import {VideoRecordIcon} from "@/components/shared";
+import {AudioRecordIcon, VideoRecordIcon} from "@/components/shared";
 
 export const VideoRecorder = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const mediaStreamRef = useRef<MediaStream | null>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
-    const [percentage, setPercentage] = useState(0);
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
+    const [percentage, setPercentage] = useState({time: 0, percent: 0});
     const [isRecording, setIsRecording] = useState(false);
     const [recordTimeout, setRecordTimeout] = useState<NodeJS.Timeout | null>(null);
-    const [elapsedTime, setElapsedTime] = useState<number>(0);
-    const [intervalRef, setIntervalRef] = useState<NodeJS.Timeout | null>(null);
+    const [recordAudioTimeout, setAudioRecordTimeout] = useState<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         const handleMouseUp = () => {
@@ -34,28 +34,6 @@ export const VideoRecorder = () => {
     const startRecording = useCallback(async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            const startTime = Date.now();
-            // Очистка предыдущего интервала, если он существует
-            if (intervalRef) {
-                clearInterval(intervalRef);
-                setIntervalRef(null);
-            }
-            // Обновление прошедшего времени каждую секунду
-            const interval = setInterval(() => {
-                const currentTime = Date.now();
-                const elapsedTime = currentTime - startTime;
-                // const time = Math.floor(elapsedTime / 1000)
-                // const progressPercentage = (elapsedTime / 10000) * 100;
-                setElapsedTime(Math.floor(elapsedTime / 1000)); // Преобразование в секунды
-                // setElapsedTime(8)
-                // setPercentage((elapsedTime / 10000) * 100);
-                // Проверка, если время записи истекло, остановить интервал
-                if (elapsedTime >= 60000) {
-                    clearInterval(interval);
-                    setIntervalRef(null);
-                }
-            }, 1000);
-            setIntervalRef(interval);
             if(videoRef.current){
                 videoRef.current.srcObject = stream;
             }
@@ -69,15 +47,15 @@ export const VideoRecorder = () => {
                 const videoUrl = URL.createObjectURL(videoBlob);
                 setVideoUrl(videoUrl)
             });
+            const timeout = setTimeout(stopRecording, 10000);
             setIsRecording(true);
-            const timeout = setTimeout(stopRecording, 60000);
             setRecordTimeout(timeout);
-
+            // setElapsedTime(100);
+            setPercentage({time: 60, percent: 100})
         } catch (error) {
             toast.error('Ошибка при получении медиа-потока:' );
         }
     }, []);
-
     const stopRecording = useCallback(() => {
         console.log("stop record")
         if (mediaRecorderRef.current && mediaStreamRef.current) {
@@ -89,20 +67,75 @@ export const VideoRecorder = () => {
             clearTimeout(recordTimeout);
             setRecordTimeout(null);
         }
-        if (intervalRef) {
-            clearInterval(intervalRef);
-            setIntervalRef(null); // Очистка ссылки на интервал в состоянии
+        setPercentage({time: 0, percent: 0})
+    },[]);
+
+    const startAudioRecording = useCallback(async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaStreamRef.current = stream;
+            mediaRecorderRef.current = new MediaRecorder(stream);
+
+            mediaRecorderRef.current.start();
+
+            mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
+                const audioBlob = new Blob([event.data], { type: 'audio/ogg; codecs=opus' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                setAudioUrl(audioUrl);
+            });
+
+            const timeout = setTimeout(stopAudioRecording, 60000);
+            // setIsRecording(true);
+            setAudioRecordTimeout(timeout);
+            // setPercentage({ time: 60, percent: 100 });
+        } catch (error) {
+            console.error('Ошибка при получении медиа-потока:', error);
+            toast.error('Ошибка при получении медиа-потока');
         }
-        setElapsedTime(0);
-    },[ intervalRef]);
+    }, []);
+    const stopAudioRecording = useCallback(() => {
+        if (mediaRecorderRef.current && mediaStreamRef.current) {
+            mediaRecorderRef.current.stop();
+            mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+        }
+        // setIsRecording(false);
+        if (recordAudioTimeout) {
+            clearTimeout(recordAudioTimeout);
+            setAudioRecordTimeout(null);
+        }
+        // setPercentage({ time: 0, percent: 0 });
+    }, []);
 
     const showVideoUrl = useCallback(() => {
         if (videoUrl) {
-            alert(`Ссылка на видео: ${videoUrl}`);
+            // alert(`<a href="${videoUrl}">Ссылка на видео: ${videoUrl}</>`);
+            const link = document.createElement('a');
+            link.href = videoUrl;
+            link.target = '_blank'; // Открыть ссылку в новой вкладке
+            link.click();
         } else {
             alert('Видео еще не записано');
         }
     },[videoUrl]);
+
+    const showAudioUrl = useCallback(() => {
+        if (audioUrl) {
+            const link = document.createElement('a');
+            link.href = audioUrl;
+            link.target = '_blank'; // Открыть ссылку в новой вкладке
+            link.click();
+        } else {
+            alert('Аудио еще не записано');
+        }
+    },[audioUrl]);
+
+    const startAudioHandler = useCallback(() => {
+        startAudioRecording();
+    }, [startAudioRecording]);
+
+    const stopAudioHandler = useCallback(() => {
+        stopAudioRecording();
+    }, [stopAudioRecording]);
 
     return (
         <div className={s.wrapperRecorder}>
@@ -116,7 +149,7 @@ export const VideoRecorder = () => {
                         <CircularProgressBar
                             strokeWidth={5}
                             sqSizeQuery={210}
-                            percentage={elapsedTime}
+                            percentage={percentage}
                         />
                         <div className={s.videoContent}>
                             <video ref={videoRef} autoPlay muted />
@@ -127,12 +160,18 @@ export const VideoRecorder = () => {
             <div className={s.btnPanel}>
                 <button onClick={stopRecording}>Остановить запись</button>
                 <button onClick={showVideoUrl}>Показать ссылку на видео</button>
+                <button onClick={showAudioUrl}>Показать ссылку на аудио</button>
+                <button onMouseDown={startAudioHandler}
+                        onMouseUp={stopAudioHandler}
+                        className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}
+                >
+                    <AudioRecordIcon />
+                </button>
                 <button onMouseDown={startRecording}
-                        disabled={isRecording} className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}>
+                         className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}>
                     <VideoRecordIcon />
                 </button>
             </div>
-            {/*{isRecording && elapsedTime !== null && <p>Прошло времени: {elapsedTime} секунд</p>}*/}
         </div>
     );
 };

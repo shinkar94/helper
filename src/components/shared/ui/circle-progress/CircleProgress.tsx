@@ -4,14 +4,18 @@ import React from "react";
 type PropsProgress = {
     strokeWidth: number,
     sqSizeQuery: number,
-    percentage: number
+    percentage: PercentageType
+}
+type PercentageType = {
+    time: number
+    percent: number
 }
 export const CircularProgressBar = ({strokeWidth, sqSizeQuery, percentage}:PropsProgress) => {
     const sqSize = sqSizeQuery;
     const radius = (sqSizeQuery - strokeWidth) / 2;
     const viewBox = `0 0 ${sqSize} ${sqSize}`;
     const dashArray = radius * Math.PI * 2;
-    const dashOffset = dashArray - dashArray * percentage / 100;
+    const dashOffset = dashArray - dashArray * percentage.percent / 100;
 
     return (
         <svg
@@ -22,14 +26,14 @@ export const CircularProgressBar = ({strokeWidth, sqSizeQuery, percentage}:Props
             fill={"none"}
         >
             <circle
-                className="circle-background"
+                className={s.circleBackground}
                 cx={sqSizeQuery / 2}
                 cy={sqSizeQuery / 2}
                 r={radius}
                 strokeWidth={`${strokeWidth}px`}
             />
             <circle
-                className="circle-progress"
+                className={s.circleProgress}
                 cx={sqSizeQuery / 2}
                 cy={sqSizeQuery / 2}
                 r={radius}
@@ -39,8 +43,8 @@ export const CircularProgressBar = ({strokeWidth, sqSizeQuery, percentage}:Props
                     strokeDasharray: dashArray,
                     strokeDashoffset: dashOffset,
                     stroke: "white",
-                    strokeLinecap: 'round',
-                    transition: 'transition: strokeDashoffset 60s ease'
+                    strokeLinecap: "round",
+                    transition: `stroke-dashoffset ${percentage.time}s linear`
                 }}
             />
         </svg>
