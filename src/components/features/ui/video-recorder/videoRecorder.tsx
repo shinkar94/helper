@@ -4,7 +4,7 @@ import {toast} from "react-toastify";
 import s from './videoRecorder.module.scss'
 import {CircularProgressBar} from "@/components/shared/ui";
 import {AudioRecordIcon, VideoRecordIcon} from "@/components/shared";
-
+type RecorderVariantType = "video" | "audio"
 export const VideoRecorder = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -13,51 +13,48 @@ export const VideoRecorder = () => {
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [percentage, setPercentage] = useState({time: 0, percent: 0});
     const [isRecording, setIsRecording] = useState(false);
+    const [isAudioRecording, setIsAudioRecording] = useState(false);
     const [recordTimeout, setRecordTimeout] = useState<NodeJS.Timeout | null>(null);
-    const [recordAudioTimeout, setAudioRecordTimeout] = useState<NodeJS.Timeout | null>(null);
 
-    // useEffect(() => {
-    //     const handleMouseUp = () => {
-    //         if (isRecording) {
-    //             stopRecording();
-    //         }
-    //     };
-    //
-    //     if (isRecording) {
-    //         document.addEventListener('mouseup', handleMouseUp);
-    //     }
-    //
-    //     return () => {
-    //         document.removeEventListener('mouseup', handleMouseUp);
-    //     };
-    // }, [isRecording]);
 
-    const startRecording = useCallback(async () => {
+
+    const startRecording = useCallback(async (variant: RecorderVariantType) => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+            const stream = await navigator.mediaDevices.getUserMedia({video: variant !== "audio", audio: true});
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
             }
             mediaStreamRef.current = stream;
             mediaRecorderRef.current = new MediaRecorder(stream);
-
             mediaRecorderRef.current.start();
 
             mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
-                const videoBlob = new Blob([event.data], {type: 'video/webm'});
-                const videoUrl = URL.createObjectURL(videoBlob);
-                setVideoUrl(videoUrl)
+                if(variant === "video"){
+                    const videoBlob = new Blob([event.data], {type: 'video/webm'});
+                    const videoUrl = URL.createObjectURL(videoBlob);
+                    setVideoUrl(videoUrl)
+                }else{
+                    const audioBlob = new Blob([event.data], {type: 'audio/ogg; codecs=opus'});
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    setAudioUrl(audioUrl);
+                }
+
             });
-            const timeout = setTimeout(stopRecording, 10000);
-            setIsRecording(true);
+            const timeout = setTimeout(() => stopRecording(variant), 60000); //передача варианта
+            if(variant === "video"){
+                setIsRecording(true);
+                setPercentage({time: 60, percent: 100})
+            }else{
+                setIsAudioRecording(true)
+            }
             setRecordTimeout(timeout);
-            // setElapsedTime(100);
-            setPercentage({time: 60, percent: 100})
         } catch (error) {
+            console.error('Ошибка при получении медиа-потока:', error);
             toast.error('Ошибка при получении медиа-потока:');
         }
     }, []);
-    const stopRecording = useCallback(() => {
+
+    const stopRecording = useCallback((variant: RecorderVariantType) => {
         console.log("stop record")
         if (mediaRecorderRef.current && mediaStreamRef.current) {
             mediaRecorderRef.current.stop();
@@ -68,43 +65,9 @@ export const VideoRecorder = () => {
             clearTimeout(recordTimeout);
             setRecordTimeout(null);
         }
-        setPercentage({time: 0, percent: 0})
-    }, []);
-
-    const startAudioRecording = useCallback(async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-            mediaStreamRef.current = stream;
-            mediaRecorderRef.current = new MediaRecorder(stream);
-
-            mediaRecorderRef.current.start();
-
-            mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
-                const audioBlob = new Blob([event.data], {type: 'audio/ogg; codecs=opus'});
-                const audioUrl = URL.createObjectURL(audioBlob);
-                setAudioUrl(audioUrl);
-            });
-
-            const timeout = setTimeout(stopAudioRecording, 60000);
-            // setIsRecording(true);
-            setAudioRecordTimeout(timeout);
-            // setPercentage({ time: 60, percent: 100 });
-        } catch (error) {
-            console.error('Ошибка при получении медиа-потока:', error);
-            toast.error('Ошибка при получении медиа-потока');
+        if(variant === "video"){
+            setPercentage({time: 0, percent: 0})
         }
-    }, []);
-    const stopAudioRecording = useCallback(() => {
-        if (mediaRecorderRef.current && mediaStreamRef.current) {
-            mediaRecorderRef.current.stop();
-            mediaStreamRef.current.getTracks().forEach((track) => track.stop());
-        }
-        // setIsRecording(false);
-        if (recordAudioTimeout) {
-            clearTimeout(recordAudioTimeout);
-            setAudioRecordTimeout(null);
-        }
-        // setPercentage({ time: 0, percent: 0 });
     }, []);
 
     const showVideoUrl = useCallback(() => {
@@ -130,21 +93,13 @@ export const VideoRecorder = () => {
         }
     }, [audioUrl]);
 
-    const startAudioHandler = useCallback(() => {
-        startAudioRecording();
-    }, [startAudioRecording]);
 
-    const stopAudioHandler = useCallback(() => {
-        stopAudioRecording();
-    }, [stopAudioRecording]);
-
-    const startVideoHandler = useCallback(() => {
-        startRecording();
-    }, [startRecording]);
-
-    const stopVideoHandler = useCallback(() => {
-        stopRecording();
-    }, [stopRecording]);
+    const startHandler = (variant: RecorderVariantType)=>{
+        startRecording(variant)
+    }
+    const stopHandler = (variant: RecorderVariantType)=> {
+        stopRecording(variant)
+    }
 
     return (
         <div className={s.wrapperRecorder}>
@@ -168,22 +123,26 @@ export const VideoRecorder = () => {
                 </div>
             </div>
             <div className={s.btnPanel}>
-                <button onClick={stopRecording}>Остановить запись</button>
-                <button onClick={stopAudioRecording}>Остановить аудио</button>
+                <button onClick={() => stopHandler("video")}>Остановить запись</button>
+                <button onClick={() => stopHandler("audio")}>Остановить аудио</button>
+
                 <button onClick={showVideoUrl}>Показать ссылку на видео</button>
                 <button onClick={showAudioUrl}>Показать ссылку на аудио</button>
-                <button onTouchStart={startAudioHandler}
-                        onTouchEnd={stopAudioHandler}
-                        onMouseDown={startAudioHandler}
-                        onMouseUp={stopAudioHandler}
+
+                <button onTouchStart={() => startHandler("audio")}
+                        onTouchEnd={() => stopHandler("audio")}
+                        onMouseDown={() => startHandler("audio")}
+                        onMouseUp={() => stopHandler("audio")}
+                        onClick={(e) => e.preventDefault()}
                         className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}
                 >
                     <AudioRecordIcon/>
                 </button>
-                <button onTouchStart={startVideoHandler}
-                        onTouchEnd={stopVideoHandler}
-                        onMouseDown={startVideoHandler}
-                        onMouseUp={stopVideoHandler}
+                <button onTouchStart={() => startHandler("video")}
+                        onTouchEnd={() => stopHandler("video")}
+                        onMouseDown={() => startHandler("video")}
+                        onMouseUp={() => stopHandler("video")}
+                        onClick={(e) => e.preventDefault()}
                         className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}>
                     <VideoRecordIcon/>
                 </button>
