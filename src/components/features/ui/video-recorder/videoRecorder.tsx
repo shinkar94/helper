@@ -9,17 +9,37 @@ export const VideoRecorder = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const mediaStreamRef = useRef<MediaStream | null>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
+
     const [percentage, setPercentage] = useState({time: 0, percent: 0});
     const [isRecording, setIsRecording] = useState(false);
     const [isAudioRecording, setIsAudioRecording] = useState(false);
+    const [isPressed, setIsPressed] = useState(false)
+    const [isMobile, setIsMobile] = useState(false);
+    const [statusRecord, setStatusRecord] = useState("audio")
+
     const [recordTimeout, setRecordTimeout] = useState<NodeJS.Timeout | null>(null);
+    const [checkTime, setСheckTime] = useState<NodeJS.Timeout | null>(null);
 
+    useEffect(() => {
+        const checkIsMobile = () => {
+            const isMobileDevice = typeof window.orientation !== 'undefined' || navigator.userAgent.indexOf('Mobile') !== -1;
+            setIsMobile(isMobileDevice);
+        };
 
+        checkIsMobile();
+        window.addEventListener('resize', checkIsMobile);
+
+        return () => {
+            window.removeEventListener('resize', checkIsMobile);
+        };
+    }, []);
 
     const startRecording = useCallback(async (variant: RecorderVariantType) => {
         try {
+            setIsPressed(true)
             const stream = await navigator.mediaDevices.getUserMedia({video: variant !== "audio", audio: true});
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
@@ -94,10 +114,26 @@ export const VideoRecorder = () => {
     }, [audioUrl]);
 
 
-    const startHandler = (variant: RecorderVariantType)=>{
-        startRecording(variant)
+    const startHandler = (variant: RecorderVariantType )=>{
+        const checkTime = setTimeout(() => {
+            startRecording(variant)
+        }, 500);
+        setСheckTime(checkTime)
+
     }
-    const stopHandler = (variant: RecorderVariantType)=> {
+    const stopRecordBtn = () => {
+        if(checkTime){
+            clearTimeout(checkTime)
+            setСheckTime(null)
+        }
+        if(isPressed){
+            setIsPressed(false)
+        }else{
+            console.log("переключи")
+            setStatusRecord(statusRecord === 'audio' ? "video" : "audio")
+        }
+    }
+    const stopHandler = (variant: RecorderVariantType )=> {
         stopRecording(variant)
     }
 
@@ -108,6 +144,7 @@ export const VideoRecorder = () => {
                     <p>Lorem ipsum dolor sit.</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore dolores illum nam nostrum
                         placeat?</p>
+                    {isMobile ? <p>Открыто на мобильном устройстве</p> : <p>Открыто на ПК</p>}
                 </div>
                 <div className={`${s.wrapperBlur} ${isRecording && s.activeBlur}`}>
                     <div className={s.progressBlock}>
@@ -123,29 +160,47 @@ export const VideoRecorder = () => {
                 </div>
             </div>
             <div className={s.btnPanel}>
-                <button onClick={() => stopHandler("video")}>Остановить запись</button>
-                <button onClick={() => stopHandler("audio")}>Остановить аудио</button>
+                {/*<button onClick={() => stopHandler("video")}>Остановить запись</button>*/}
+                {/*<button onClick={() => stopHandler("audio")}>Остановить аудио</button>*/}
 
                 <button onClick={showVideoUrl}>Показать ссылку на видео</button>
                 <button onClick={showAudioUrl}>Показать ссылку на аудио</button>
+                <div className={s.btnChangeBlock}>
+                    {isMobile ? (
+                        <>
+                            <button onTouchStart={() => startHandler("audio")}
+                                    onTouchEnd={() => stopHandler("audio")}
+                                    onClick={stopRecordBtn}
+                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "audio" && s.activeBtn}`}
+                            >
+                                <AudioRecordIcon/>
+                            </button>
+                            <button onTouchStart={()=> startHandler('video')}
+                                    onTouchEnd={() => stopHandler('video')}
+                                    onClick={stopRecordBtn}
+                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "video" && s.activeBtn}`}>
+                                <VideoRecordIcon/>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button onMouseDown={() => startHandler("audio")}
+                                    onMouseUp={() => stopHandler("audio")}
+                                    onClick={stopRecordBtn}
+                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "audio" && s.activeBtn}`}
+                            >
+                                <AudioRecordIcon/>
+                            </button>
+                            <button onMouseDown={() => startHandler("video")}
+                                    onMouseUp={() => stopHandler("video")}
+                                    onClick={stopRecordBtn}
+                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "video" && s.activeBtn}`}>
+                                <VideoRecordIcon/>
+                            </button>
+                        </>
+                    )}
+                </div>
 
-                <button onTouchStart={() => startHandler("audio")}
-                        onTouchEnd={() => stopHandler("audio")}
-                        onMouseDown={() => startHandler("audio")}
-                        onMouseUp={() => stopHandler("audio")}
-                        onClick={(e) => e.preventDefault()}
-                        className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}
-                >
-                    <AudioRecordIcon/>
-                </button>
-                <button onTouchStart={() => startHandler("video")}
-                        onTouchEnd={() => stopHandler("video")}
-                        onMouseDown={() => startHandler("video")}
-                        onMouseUp={() => stopHandler("video")}
-                        onClick={(e) => e.preventDefault()}
-                        className={`${s.recordVideo} ${isRecording && s.recordVideoActive}`}>
-                    <VideoRecordIcon/>
-                </button>
             </div>
         </div>
     );
