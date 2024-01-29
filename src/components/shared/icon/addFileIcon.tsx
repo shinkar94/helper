@@ -18,9 +18,9 @@ const SvgComponent = (
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="m23 7-7 5 7 5V7ZM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"
+            d="m21.44 11.05-9.19 9.19a6.003 6.003 0 0 1-8.49-8.49l9.19-9.19a4.002 4.002 0 0 1 5.66 5.66l-9.2 9.19a2.001 2.001 0 1 1-2.83-2.83l8.49-8.48"
         />
     </svg>
 )
 const ForwardRef = forwardRef(SvgComponent)
-export const VideoRecordIcon = memo(ForwardRef)
+export const AddFileIcon = memo(ForwardRef)
