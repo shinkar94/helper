@@ -14,13 +14,13 @@ const SvgComponent = (
         {...props}
     >
         <path
-            stroke="#5C5C5C"
+            stroke="#fff"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="m23 7-7 5 7 5V7ZM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"
+            d="M5 12h14M12 5l7 7-7 7"
         />
     </svg>
 )
 const ForwardRef = forwardRef(SvgComponent)
-export const VideoRecordIcon = memo(ForwardRef)
+export const ArrowRight = memo(ForwardRef)
