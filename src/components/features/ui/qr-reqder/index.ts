@@ -1,0 +1,1 @@
+export {QrReaderC} from './QrReader'

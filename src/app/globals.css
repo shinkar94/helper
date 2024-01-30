@@ -29,3 +29,13 @@ body{
     --gl-blue-600: #26517C;
 
 }
+#qrCodeContainer{
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+#qr-shaded-region{
+    border-width: 50px !important;
+}

@@ -1,11 +1,13 @@
 "use client"
 import s from './testingContent.module.scss'
-import {VideoRecorder} from "@/components/features/ui";
+import {QrReaderC, VideoRecorder} from "@/components/features/ui";
 export const TestingContent = () => {
     return(
         <div className={s.wrapper}>
-            <div>Testing page</div>
-            <VideoRecorder />
+            {/*<div>Testing page</div>*/}
+            {/*<VideoRecorder />*/}
+            {/*<h3>QR reader</h3>*/}
+            <QrReaderC />
         </div>
     )
 }
