@@ -1,5 +1,5 @@
 .wrapperScanner{
-  //z-index: 4;
+  z-index: 4;
   position: fixed;
   top: 0;
   left: 0;
@@ -9,36 +9,64 @@
   justify-content: center;
   align-items: center;
   background: black;
-  #qrCodeContainer {
-    position: relative;
+  .cornerScreen{
+    position: absolute;
+    //background: rgba(0, 128, 0, 0.58);
     width: 300px;
-    height: 300px;
-    border-radius: 7px;
-    overflow: hidden;
-
-    &[id="qr-shaded-region"] {
-      position: relative;
-      border-width: 50px !important;
+    height: 210px;
+    z-index: 4;
+    .screenLine{
+      position: absolute;
+    }
+    .topLeft{
+      top: 0;
+      left: 0;
+      transform: rotate(-90deg);
+    }
+    .topRight{
+      top: 0;
+      right: 0;
+    }
+    .bottomLeft{
+      bottom: 0;
+      left: 0;
+      transform: rotate(-180deg);
+    }
+    .bottomRight{
+      bottom: 0;
+      right: 0;
+      transform: rotate(90deg);
+    }
+    .scannerLine{
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      height: 2px;
+      width: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, rgba(255, 54, 162, 0.00) 5.78%, #FF36A2 52.23%, rgba(255, 54, 162, 0.00) 100%);
+      animation: scanner 4s linear 0s infinite;
+    }
+    @keyframes scanner {
+      0%{
+        top: 0;
+      }
+      50%{
+        top: 100%;
+      }
+      100%{
+        top: 0;
+      }
     }
   }
-  #qrCodeContainer{
-    position: relative;
-    width: 300px;
-    height: 300px;
-    border-radius: 7px;
-    overflow: hidden;
-  }
-  #qr-shaded-region{
-    border-width: 50px !important;
-  }
-
   video{
     position: absolute;
     top: 50%;
     left: 50%;
     width: auto !important;
-    //min-width: calc(100vw - 60px);
-    //min-height: 100dvh;
+    min-width: 100vw;
+    min-height: 100dvh;
     transform: translate(-50%, -50%);
   }
   .startBtn{
@@ -53,26 +81,4 @@
     font-size: 20px;
     color: #fff;
   }
-  &#qrCodeContainer{
-    position: relative;
-    width: 300px;
-    height: 300px;
-    border-radius: 7px;
-    overflow: hidden;
-  }
-  #qr-shaded-region{
-    border-width: 50px !important;
-  }
-  //.scannerLine{
-  //  position: absolute;
-  //  z-index: 5;
-  //  top: 50%;
-  //  left: 50%;
-  //  transform: translate(-50%, calc(-50% - 100px));
-  //  display: flex;
-  //  height: 2px;
-  //  width: 400px;
-  //  background: red;
-  //
-  //}
 }
