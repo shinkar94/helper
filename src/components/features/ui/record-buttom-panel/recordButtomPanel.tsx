@@ -79,27 +79,6 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                 .catch((err) => {
                     setError(err.name);
                 });
-            // -----------------------------------------------------
-            // const stream = await navigator.mediaDevices.getUserMedia({video: variant !== "audio", audio: true});
-            // if (videoRef.current) {
-            //     videoRef.current.srcObject = stream;
-            // }
-            // mediaStreamRef.current = stream;
-            // mediaRecorderRef.current = new MediaRecorder(stream);
-            // mediaRecorderRef.current.start();
-            //
-            // mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
-            //     if(variant === "video"){
-            //         const videoBlob = new Blob([event.data], {type: 'video/webm'});
-            //         const videoUrl = URL.createObjectURL(videoBlob);
-            //         setVideoUrl(videoUrl)
-            //     }else{
-            //         const audioBlob = new Blob([event.data], {type: 'audio/ogg; codecs=opus'});
-            //         const audioUrl = URL.createObjectURL(audioBlob);
-            //         setAudioUrl(audioUrl);
-            //     }
-            //
-            // });
             const timeout = setTimeout(() => stopRecording(variant), 60000); //передача варианта
             if(variant === "video"){
                 setIsRecording(true);
