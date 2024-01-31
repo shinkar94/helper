@@ -36,6 +36,7 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
     const [isPressed, setIsPressed] = useState(false)
     const [statusRecord, setStatusRecord] = useState("audio")
     const [smileButtonName, setSmileButtonName] = useState<SmileButtonType>('smile')
+    const [error, setError] = useState<string | null>();
 
     const [recordTimeout, setRecordTimeout] = useState<NodeJS.Timeout | null>(null);
     const [checkTime, setСheckTime] = useState<NodeJS.Timeout | null>(null);
@@ -45,26 +46,60 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
     const startRecording = useCallback(async (variant: RecorderVariantType) => {
         try {
             setIsPressed(true)
-            const stream = await navigator.mediaDevices.getUserMedia({video: variant !== "audio", audio: true});
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-            mediaStreamRef.current = stream;
-            mediaRecorderRef.current = new MediaRecorder(stream);
-            mediaRecorderRef.current.start();
+            navigator.mediaDevices
+                .getUserMedia({
+                    audio: true,
+                    video: variant !== "audio",
+                })
+                .then((stream) => {
+                    mediaStreamRef.current = stream;
+                    mediaRecorderRef.current = new MediaRecorder(stream);
+                    mediaRecorderRef.current.start();
+                    mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
+                        if(variant === "video"){
+                            const videoBlob = new Blob([event.data], {type: 'video/mp4'});
+                            const videoUrl = URL.createObjectURL(videoBlob);
+                            setVideoUrl(videoUrl)
+                        }else{
+                            const audioBlob = new Blob([event.data], {type: 'audio/mpeg'});
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            setAudioUrl(audioUrl);
+                        }
 
-            mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
-                if(variant === "video"){
-                    const videoBlob = new Blob([event.data], {type: 'video/webm'});
-                    const videoUrl = URL.createObjectURL(videoBlob);
-                    setVideoUrl(videoUrl)
-                }else{
-                    const audioBlob = new Blob([event.data], {type: 'audio/ogg; codecs=opus'});
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    setAudioUrl(audioUrl);
-                }
-
-            });
+                    });
+                    if (videoRef.current) {
+                        videoRef.current.srcObject = mediaStreamRef.current;
+                        videoRef.current.onloadedmetadata = () => {
+                            if (videoRef.current) {
+                                videoRef.current.play();
+                            }
+                        };
+                    }
+                })
+                .catch((err) => {
+                    setError(err.name);
+                });
+            // -----------------------------------------------------
+            // const stream = await navigator.mediaDevices.getUserMedia({video: variant !== "audio", audio: true});
+            // if (videoRef.current) {
+            //     videoRef.current.srcObject = stream;
+            // }
+            // mediaStreamRef.current = stream;
+            // mediaRecorderRef.current = new MediaRecorder(stream);
+            // mediaRecorderRef.current.start();
+            //
+            // mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
+            //     if(variant === "video"){
+            //         const videoBlob = new Blob([event.data], {type: 'video/webm'});
+            //         const videoUrl = URL.createObjectURL(videoBlob);
+            //         setVideoUrl(videoUrl)
+            //     }else{
+            //         const audioBlob = new Blob([event.data], {type: 'audio/ogg; codecs=opus'});
+            //         const audioUrl = URL.createObjectURL(audioBlob);
+            //         setAudioUrl(audioUrl);
+            //     }
+            //
+            // });
             const timeout = setTimeout(() => stopRecording(variant), 60000); //передача варианта
             if(variant === "video"){
                 setIsRecording(true);

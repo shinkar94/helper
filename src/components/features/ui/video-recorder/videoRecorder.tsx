@@ -45,7 +45,7 @@ export const VideoRecorder = () => {
                             percentage={percentage}
                         />
                         <div className={s.videoContent}>
-                            <video ref={videoRef} controls={true} autoPlay muted/>
+                            <video ref={videoRef} playsInline autoPlay muted/>
                         </div>
                     </div>
                 </div>
