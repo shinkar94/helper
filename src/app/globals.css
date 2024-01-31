@@ -31,11 +31,15 @@ body{
 }
 #qrCodeContainer{
     position: relative;
-    width: 300px;
+    width: 100%;
     height: 300px;
     border-radius: 7px;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 #qr-shaded-region{
+    border-color: rgba(0, 0, 0, 0) !important;
     border-width: 50px !important;
+    & div{
+        background-color: rgba(0, 0, 0, 0) !important;
+    }
 }
