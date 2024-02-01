@@ -52,6 +52,7 @@ export const VideoRecorder = () => {
             </div>
             <RecordBottomPanel
                 isRecording={isRecording}
+                isAudioRecording={isAudioRecording}
                 setIsRecording={setIsRecording}
                 setIsAudioRecording={setIsAudioRecording}
                 isMobile={isMobile}

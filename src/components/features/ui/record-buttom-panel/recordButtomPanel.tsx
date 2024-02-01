@@ -1,9 +1,9 @@
 import s from './recordButtonPanel.module.scss'
 import {
-    AddFileIcon,
+    AddFileIcon, ArrowLeftIcon,
     ArrowRight,
-    AudioRecordIcon,
-    DownloadIcon,
+    AudioRecordIcon, DinnerIcon,
+    GiftIcon,
     KeyBoard,
     SmileIcon,
     VideoRecordIcon
@@ -19,13 +19,14 @@ type Props = {
     setPercentage: (percent: PercentageType) => void
     setIsAudioRecording: (record: boolean) => void
     isRecording: boolean
+    isAudioRecording: boolean
     isMobile: boolean
 }
 type PercentageType = {
     time: number
     percent: number
 }
-export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef, setPercentage, isRecording, isMobile}:Props) => {
+export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef, setPercentage, isRecording, isMobile, isAudioRecording}:Props) => {
 
     const mediaStreamRef = useRef<MediaStream | null>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -41,6 +42,12 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
     const [recordTimeout, setRecordTimeout] = useState<NodeJS.Timeout | null>(null);
     const [checkTime, setСheckTime] = useState<NodeJS.Timeout | null>(null);
 
+    const startIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const [recordingTime, setRecordingTime] = useState<number>(0)
+    // const [volume, setVolume ] = useState(0)
+    // console.log(recordingTime)
+    // console.log(volume)
+
     const [message, setMessage] = useState('')
 
     const startRecording = useCallback(async (variant: RecorderVariantType) => {
@@ -54,6 +61,7 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                 .then((stream) => {
                     mediaStreamRef.current = stream;
                     mediaRecorderRef.current = new MediaRecorder(stream);
+
                     mediaRecorderRef.current.start();
                     mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
                         if(variant === "video"){
@@ -75,6 +83,14 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                             }
                         };
                     }
+                    const time = Date.now();
+                    const startTime = setInterval(() => {
+                        const currentTime = Date.now();
+                        const elapsedTime = Math.floor((currentTime - time)); // Время в секундах
+                        // Сохраняем время записи в состояние
+                        setRecordingTime(elapsedTime);
+                    }, 100);
+                    startIntervalRef.current = startTime;
                 })
                 .catch((err) => {
                     setError(err.name);
@@ -100,9 +116,14 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
             mediaStreamRef.current.getTracks().forEach((track) => track.stop());
         }
         setIsRecording(false);
+        setIsAudioRecording(false)
         if (recordTimeout) {
             clearTimeout(recordTimeout);
             setRecordTimeout(null);
+        }
+        if(startIntervalRef.current){
+            clearInterval(startIntervalRef.current)
+            setRecordingTime(0)
         }
         if(variant === "video"){
             setPercentage({time: 0, percent: 0})
@@ -111,7 +132,6 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
 
     const showVideoUrl = useCallback(() => {
         if (videoUrl) {
-            // alert(`<a href="${videoUrl}">Ссылка на видео: ${videoUrl}</>`);
             const link = document.createElement('a');
             link.href = videoUrl;
             link.target = '_blank'; // Открыть ссылку в новой вкладке
@@ -145,6 +165,11 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
             clearTimeout(checkTime)
             setСheckTime(null)
         }
+        if(startIntervalRef.current){
+            console.log("OPEN DEL")
+            clearInterval(startIntervalRef.current)
+            setRecordingTime(0)
+        }
         if(isPressed){
             setIsPressed(false)
         }else{
@@ -159,6 +184,11 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
     const addMessage = (e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.currentTarget.value)
     }
+    const changeTime = (time: number) =>{
+        const seconds = Math.floor((time / 1000) % 60).toString().padStart(2, '0');
+        const milliseconds = Math.floor((time % 1000) / 10).toString().padStart(2, '0');
+        return `${seconds}:${milliseconds}`;
+    }
     const checkMessage = message.length > 0
     return(
         <div className={s.btnPanel}>
@@ -172,23 +202,43 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                     <button className={`${s.addFile} ${checkMessage && s.activeAddFile}`}><AddFileIcon /></button>
                     <button className={`${s.sendBtn} ${checkMessage &&  s.activeSend}`}><ArrowRight /></button>
                 </div>
-                <button className={s.giftBtn}><DownloadIcon /></button>
-                <button className={s.dinnerBtn}><DownloadIcon /></button>
+                <div className={`${s.recorderLine}`} style={{left: `${(isRecording || isAudioRecording) ? 0 : '100%'}`}}>
+                    <div className={s.recordTime}>
+                        <span className={`${(isRecording || isAudioRecording) && s.activeSpan}`}></span>
+                        {changeTime(recordingTime)}
+                    </div>
+                    <div className={s.closeLine}>
+                        <ArrowLeftIcon />
+                        <div className="text">Left — cancellation</div>
+                    </div>
+                    <div className={s.emptyBlock}></div>
+                </div>
+                <button className={s.giftBtn}><GiftIcon /></button>
+                <button className={s.dinnerBtn}><DinnerIcon /></button>
                 <div className={s.btnChangeBlock}>
+                    {(isRecording || isAudioRecording) && (<div className={s.animCircleBlock}>
+                        <span></span>
+                        <span></span>
+                    </div>)}
+                    {/*<div className={s.animCircleBlock}>*/}
+                    {/*    <span></span>*/}
+                    {/*    <span></span>*/}
+                    {/*</div>*/}
+
                     {isMobile ? (
                         <>
                             <button onTouchStart={() => startHandler("audio")}
                                     onTouchEnd={() => stopHandler("audio")}
                                     onClick={stopRecordBtn}
-                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "audio" && s.activeBtn}`}
+                                    className={`${s.recordVideo} ${(isRecording || isAudioRecording) && s.recordVideoActive} ${statusRecord === "audio" && s.activeBtn}`}
                             >
-                                <AudioRecordIcon/>
+                                <AudioRecordIcon color={isAudioRecording ? "white" : ""}/>
                             </button>
                             <button onTouchStart={()=> startHandler('video')}
                                     onTouchEnd={() => stopHandler('video')}
                                     onClick={stopRecordBtn}
-                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "video" && s.activeBtn}`}>
-                                <VideoRecordIcon/>
+                                    className={`${s.recordVideo} ${(isRecording || isAudioRecording) && s.recordVideoActive} ${statusRecord === "video" && s.activeBtn}`}>
+                                <VideoRecordIcon color={isRecording ? "white" : ""}/>
                             </button>
                         </>
                     ) : (
@@ -196,15 +246,15 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                             <button onMouseDown={() => startHandler("audio")}
                                     onMouseUp={() => stopHandler("audio")}
                                     onClick={stopRecordBtn}
-                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "audio" && s.activeBtn}`}
+                                    className={`${s.recordVideo} ${(isRecording || isAudioRecording) && s.recordVideoActive} ${statusRecord === "audio" && s.activeBtn}`}
                             >
-                                <AudioRecordIcon/>
+                                <AudioRecordIcon color={isAudioRecording ? "white" : ""}/>
                             </button>
                             <button onMouseDown={() => startHandler("video")}
                                     onMouseUp={() => stopHandler("video")}
                                     onClick={stopRecordBtn}
-                                    className={`${s.recordVideo} ${isRecording && s.recordVideoActive} ${statusRecord === "video" && s.activeBtn}`}>
-                                <VideoRecordIcon/>
+                                    className={`${s.recordVideo} ${(isRecording || isAudioRecording) && s.recordVideoActive} ${statusRecord === "video" && s.activeBtn}`}>
+                                <VideoRecordIcon color={isRecording ? "white" : ""}/>
                             </button>
                         </>
                     )}
@@ -214,6 +264,10 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                 <button onClick={showVideoUrl}>Показать ссылку на видео</button>
                 <button onClick={showAudioUrl}>Показать ссылку на аудио</button>
             </div>
+            {/*<div className={s.animCircleBlock}>*/}
+            {/*    <span></span>*/}
+            {/*    <span></span>*/}
+            {/*</div>*/}
             <div className={`${s.smilePack} ${smileButtonName === "keyBoard" && s.openPack}`}>
                 <p className={s.descText}>Free pack</p>
                 <div className={`${s.packLine} ${s.freePack}`}>
