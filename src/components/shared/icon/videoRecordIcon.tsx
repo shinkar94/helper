@@ -1,9 +1,9 @@
 import * as React from "react"
 import { SVGProps, Ref, forwardRef, memo } from "react"
-const SvgComponent = (
-    props: SVGProps<SVGSVGElement>,
-    ref: Ref<SVGSVGElement>
-) => (
+interface SvgComponentProps extends SVGProps<SVGSVGElement> {
+    color?: string;
+}
+const SvgComponent = ({ color, ...props }: SvgComponentProps, ref: Ref<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={24}
@@ -14,7 +14,7 @@ const SvgComponent = (
         {...props}
     >
         <path
-            stroke="#5C5C5C"
+            stroke={color ? color : "#5C5C5C"}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
