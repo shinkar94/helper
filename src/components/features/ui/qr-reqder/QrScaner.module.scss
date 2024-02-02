@@ -45,7 +45,7 @@
       height: 2px;
       width: 100%;
       border-radius: 4px;
-      background: linear-gradient(90deg, rgba(255, 54, 162, 0.00) 5.78%, #FF36A2 52.23%, rgba(255, 54, 162, 0.00) 100%);
+      background: linear-gradient(90deg, rgba(255, 54, 162, 0.00) 5.78%, #F29E61 52.23%, rgba(255, 54, 162, 0.00) 100%);
       animation: scanner 4s linear 0s infinite;
     }
     @keyframes scanner {
@@ -75,7 +75,7 @@
     right: 30px;
     height: 40px;
     width: 40px;
-    background-color: red;
+    background-color: var(--gl-gold);
     border: 0;
     border-radius: 7px;
     font-size: 20px;
