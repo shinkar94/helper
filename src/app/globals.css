@@ -27,6 +27,7 @@ body{
     --gl-gold-opacity: rgba(243, 159, 90, 0.61);
     --gl-blue-900: rgba(38, 81, 124, 0.59);
     --gl-blue-600: #26517C;
+    --shadow-bottom-button: 0 2px 1px 1px black;
 
 }
 #qrCodeContainer{

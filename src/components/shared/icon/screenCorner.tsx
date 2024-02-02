@@ -13,7 +13,7 @@ const SvgComponent = (
         {...props}
     >
         <path
-            stroke="#FF36A2"
+            stroke="#F29E61"
             strokeWidth={4}
             d="M40 42.292V18c0-8.837-7.16-16-15.996-16H.48"
         />
