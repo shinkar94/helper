@@ -1,0 +1,51 @@
+.chatWrapper{
+  display: flex;
+  flex-direction: column;
+  .chatHeader{
+    background: black;
+  }
+  .content{
+    flex-grow: 1;
+    background: blanchedalmond;
+    display: flex;
+    justify-content: center;
+    height: 100dvh;
+    .messagesList{
+      position: relative;
+      background: #522b5b;
+      display: flex;
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+      .messagesBlock{
+        user-select: none;
+        position: absolute;
+        left: 0;
+        display: flex;
+        background: green;
+        height: 60px;
+        transition: left 0.5s ease-in-out;
+        .leftPanel{
+          display: flex;
+          width: 500px;
+          background: sandybrown;
+          .avatarBlock{
+
+          }
+          .infoBlock{
+
+          }
+          .timeBlock{
+          }
+        }
+        .rightPanel{
+          display: flex;
+          & button{
+            width: 60px;
+            height: 60px;
+          }
+        }
+      }
+    }
+  }
+}
