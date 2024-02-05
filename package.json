@@ -11,9 +11,12 @@
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
     "@hookform/resolvers": "^3.3.2",
+    "@tensorflow-models/facemesh": "^0.0.5",
+    "@tensorflow/tfjs": "^4.17.0",
     "@types/uuid": "^9.0.7",
     "bcrypt": "^5.1.0",
     "cookies-next": "^4.0.0",
+    "crypto-js": "^4.2.0",
     "firebase": "^10.7.1",
     "html5-qrcode": "^2.3.8",
     "immer": "^10.0.3",
@@ -39,6 +42,7 @@
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
     "@types/bcrypt": "^5.0.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mongoose": "^5.11.97",
     "@types/next-pwa": "^5.6.9",

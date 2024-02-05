@@ -1,0 +1,30 @@
+.faceWrapper{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100vw - 42px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100dvh - 40px);
+  padding: 20px;
+  background: var(--gl-black-900);
+  video, canvas{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 640px;
+    height: 640px;
+    transform: translate(-50%, -50%);
+  }
+  button{
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    border: 0;
+    background: var(--gl-gold);
+    font-size: 20px;
+  }
+}
