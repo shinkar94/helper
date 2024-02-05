@@ -39,7 +39,7 @@ export const Sidebar = () => {
                 <div className={s.link}><Link href={'/Page/testing'} ><div className={s.linkSvg}><TestingIcon/></div> Test</Link></div>
                 <div className={s.link}><Link href={'/Page/tools'} ><div className={s.linkSvg}><ToolsIcon/></div> Tools</Link></div>
                 <div className={s.link}><Link href={'/Page/todos'} ><div className={s.linkSvg}><TodoIcon/></div> Todos</Link></div>
-                <div className={s.link}><Link href={''} ><div className={s.linkSvg}><ChatIcon/></div> Chat</Link></div>
+                <div className={s.link}><Link href={'/Page/chat'} ><div className={s.linkSvg}><ChatIcon/></div> Chat</Link></div>
             </div>
             <hr className={s.line}/>
             <div className={s.blockLink}>
