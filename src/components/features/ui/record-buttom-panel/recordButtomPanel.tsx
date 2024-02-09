@@ -43,10 +43,10 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
     const [checkTime, setСheckTime] = useState<NodeJS.Timeout | null>(null);
 
     const startIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const volumeIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const [recordingTime, setRecordingTime] = useState<number>(0)
-    // const [volume, setVolume ] = useState(0)
-    // console.log(recordingTime)
-    // console.log(volume)
+
+    const [volumeLevel, setVolumeLevel] = useState(0);
 
     const [message, setMessage] = useState('')
 
@@ -61,6 +61,30 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                 .then((stream) => {
                     mediaStreamRef.current = stream;
                     mediaRecorderRef.current = new MediaRecorder(stream);
+                    // Web Audio API setup
+                    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+                    const analyser = audioContext.createAnalyser();
+                    const bufferLength = analyser.frequencyBinCount;
+                    const dataArray = new Uint8Array(bufferLength);
+
+                    const source = audioContext.createMediaStreamSource(stream);
+                    source.connect(analyser);
+
+                    const updateVolume = () => {
+                        analyser.getByteTimeDomainData(dataArray);
+                        let sum = 0;
+                        for (let i = 0; i < bufferLength; i++) {
+                            const amplitude = (dataArray[i] - 128) / 128.0;
+                            sum += Math.abs(amplitude);
+                        }
+                        const averageVolume = sum / bufferLength;
+                        const scaledVolume = Math.round(averageVolume * 100);
+
+                        setVolumeLevel(scaledVolume)
+                    };
+
+                    const volumeInterval = setInterval(updateVolume, 100);
+                    volumeIntervalRef.current = volumeInterval;
 
                     mediaRecorderRef.current.start();
                     mediaRecorderRef.current.addEventListener('dataavailable', (event) => {
@@ -117,6 +141,7 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
         }
         setIsRecording(false);
         setIsAudioRecording(false)
+        setVolumeLevel(0);
         if (recordTimeout) {
             clearTimeout(recordTimeout);
             setRecordTimeout(null);
@@ -127,6 +152,10 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
         }
         if(variant === "video"){
             setPercentage({time: 0, percent: 0})
+        }
+        if (volumeIntervalRef.current) {
+            clearInterval(volumeIntervalRef.current);
+            volumeIntervalRef.current = null;
         }
     }, []);
 
@@ -217,13 +246,9 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                 <button className={s.dinnerBtn}><DinnerIcon /></button>
                 <div className={s.btnChangeBlock}>
                     {(isRecording || isAudioRecording) && (<div className={s.animCircleBlock}>
-                        <span></span>
-                        <span></span>
+                        <span style={{ width: `${volumeLevel * 10}px`, height: `${volumeLevel * 10}px` }}></span>
+                        <span style={{ width: `${volumeLevel * 10}px`, height: `${volumeLevel * 10}px` }}></span>
                     </div>)}
-                    {/*<div className={s.animCircleBlock}>*/}
-                    {/*    <span></span>*/}
-                    {/*    <span></span>*/}
-                    {/*</div>*/}
 
                     {isMobile ? (
                         <>
@@ -264,10 +289,6 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                 <button onClick={showVideoUrl}>Показать ссылку на видео</button>
                 <button onClick={showAudioUrl}>Показать ссылку на аудио</button>
             </div>
-            {/*<div className={s.animCircleBlock}>*/}
-            {/*    <span></span>*/}
-            {/*    <span></span>*/}
-            {/*</div>*/}
             <div className={`${s.smilePack} ${smileButtonName === "keyBoard" && s.openPack}`}>
                 <p className={s.descText}>Free pack</p>
                 <div className={`${s.packLine} ${s.freePack}`}>

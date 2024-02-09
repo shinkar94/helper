@@ -181,6 +181,11 @@
         span{
           width: 100%;
           height: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          min-width: 70%;
+          min-height: 70%;
+          transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
           position: absolute;
           border-radius: 44% 61% 63% 52%/42% 64% 75% 68%;
           background: #FF36A2;
@@ -189,6 +194,11 @@
         & span:nth-child(1){
           width: 80%;
           height: 80%;
+          max-width: 80%;
+          max-height: 80%;
+          min-width: 60%;
+          min-height: 60%;
+          transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
           animation: firstRotate 6s linear infinite reverse;
           border-radius: 32% 78% 51% 60%/42% 50% 61% 44%;
           z-index: 1;
