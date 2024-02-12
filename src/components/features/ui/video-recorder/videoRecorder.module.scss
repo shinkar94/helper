@@ -72,4 +72,30 @@
       z-index: 1;
     }
   }
+  .wrapperAudioMessage{
+    display: flex;
+    width: 300px;
+    height: 80px;
+    padding: 5px;
+    background: green;
+    .controlPanel{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      background: brown;
+      .playBtn{
+        border-radius: 50%;
+        border: 0;
+        width: 40px;
+        height: 40px;
+      }
+      .audioLine{
+        flex-grow: 1;
+        background: black;
+      }
+    }
+  }
+
 }

@@ -5,6 +5,8 @@ import s from './videoRecorder.module.scss'
 import {CircularProgressBar} from "@/components/shared/ui";
 
 import {RecordBottomPanel} from "@/components/features/ui/record-buttom-panel";
+import {AudioMessage} from "@/components/features/ui";
+
 
 export const VideoRecorder = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -13,6 +15,8 @@ export const VideoRecorder = () => {
     const [isRecording, setIsRecording] = useState(false);
     const [isAudioRecording, setIsAudioRecording] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+
+    const [audioUrl, setAudioUrl] = useState<string[] | []>([]);
 
     useEffect(() => {
         const checkIsMobile = () => {
@@ -27,6 +31,13 @@ export const VideoRecorder = () => {
             window.removeEventListener('resize', checkIsMobile);
         };
     }, []);
+    useEffect(() => {
+        const getAudio = localStorage.getItem('myAudio');
+        const audio = getAudio ? JSON.parse(getAudio) : null;
+        setAudioUrl([audio]);
+    }, []);
+
+    console.log(audioUrl)
 
     return (
         <div className={s.wrapperRecorder}>
@@ -58,6 +69,9 @@ export const VideoRecorder = () => {
                 isMobile={isMobile}
                 videoRef={videoRef}
                 setPercentage={setPercentage}/>
+
+            {audioUrl.length > 0 && audioUrl.map((url, index) => <AudioMessage key={index} url={url}/>)}
+
         </div>
     );
 };

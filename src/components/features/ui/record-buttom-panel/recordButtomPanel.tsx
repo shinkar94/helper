@@ -96,6 +96,14 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                             const audioBlob = new Blob([event.data], {type: 'audio/mpeg'});
                             const audioUrl = URL.createObjectURL(audioBlob);
                             setAudioUrl(audioUrl);
+                            const reader = new FileReader();
+                            reader.onloadend = function () {
+                                if (reader.result) {
+                                    localStorage.setItem('myAudio', JSON.stringify(reader.result));
+                                    console.log('Видео сохранено в локальное хранилище');
+                                }
+                            };
+                            reader.readAsDataURL(audioBlob);
                         }
 
                     });
