@@ -10,6 +10,8 @@ export const AudioMessage = ({url}:Props) => {
     const [audioDuration, setAudioDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [isAudioLoaded, setIsAudioLoaded] = useState(false);
+
+    // console.log("start URl", url)
     useEffect(() => {
         const audioElement = audioRef.current;
 
@@ -27,19 +29,13 @@ export const AudioMessage = ({url}:Props) => {
             const audioUrl = URL.createObjectURL(blob);
 
             audioElement.src = audioUrl;
+            console.log("finishUrl", audioUrl)
 
             const handleLoadedMetadata = () => {
+                console.log("success")
+                console.log("duration", audioElement.duration)
                 setAudioDuration(audioElement.duration);
                 setIsAudioLoaded(true);
-            };
-            const handleLoadedData = () => {
-                console.log("open function")
-                console.log("duration", audioElement.duration)
-                setTimeout(()=>{
-                    console.log("start time")
-                    setAudioDuration(audioElement.duration);
-                }, 1000)
-                // setAudioDuration(audioElement.duration);
             };
 
             const handleTimeUpdate = () => {
@@ -48,7 +44,6 @@ export const AudioMessage = ({url}:Props) => {
 
             audioElement.addEventListener("loadedmetadata", handleLoadedMetadata);
             audioElement.addEventListener("timeupdate", handleTimeUpdate);
-            audioElement.addEventListener("loadeddata", handleLoadedData);
 
             return () => {
                 audioElement.removeEventListener(
@@ -56,7 +51,6 @@ export const AudioMessage = ({url}:Props) => {
                     handleLoadedMetadata
                 );
                 audioElement.removeEventListener("timeupdate", handleTimeUpdate);
-                audioElement.removeEventListener("loadeddata", handleLoadedData);
                 URL.revokeObjectURL(audioUrl);
             };
         }
@@ -82,6 +76,7 @@ export const AudioMessage = ({url}:Props) => {
     return(
         <div className={s.wrapperAudioMessage}>
             <audio className={s.audioMessage} ref={audioRef}></audio>
+            {/*<audio className={s.audioMessage} src={"https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3"} ref={audioRef}></audio>*/}
             <div className={s.controlPanel}>
                 <button className={s.playBtn} onClick={playAudio}>{isPlaying ? 'Pause' : 'Play'}</button>
                 <div className={s.audioLine}>werwer</div>
