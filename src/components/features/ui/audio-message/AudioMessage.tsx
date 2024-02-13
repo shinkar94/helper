@@ -3,17 +3,19 @@ import React, {useEffect, useRef, useState} from "react";
 
 type Props = {
     url: string
+    duration: string
 }
-export const AudioMessage = ({url}:Props) => {
+export const AudioMessage = ({url, duration}:Props) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [audioDuration, setAudioDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
-    const [isAudioLoaded, setIsAudioLoaded] = useState(false);
+    const [clipboardContent, setClipboardContent] = useState('');
 
-    // console.log("start URl", url)
+    const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
+    const [audioData, setAudioData] = useState<Uint8Array | null>(null);
+
     useEffect(() => {
-        const audioElement = audioRef.current;
+        const audioElement = audioRef.current
 
         if (audioElement) {
             const byteString = atob(url.split(",")[1]);
@@ -28,30 +30,16 @@ export const AudioMessage = ({url}:Props) => {
             const blob = new Blob([intArray], { type: mimeString });
             const audioUrl = URL.createObjectURL(blob);
 
-            audioElement.src = audioUrl;
-            console.log("finishUrl", audioUrl)
+            audioElement.src = audioUrl
 
-            const handleLoadedMetadata = () => {
-                console.log("success")
-                console.log("duration", audioElement.duration)
-                setAudioDuration(audioElement.duration);
-                setIsAudioLoaded(true);
-            };
 
             const handleTimeUpdate = () => {
                 setCurrentTime(audioElement.currentTime);
             };
-
-            audioElement.addEventListener("loadedmetadata", handleLoadedMetadata);
             audioElement.addEventListener("timeupdate", handleTimeUpdate);
 
             return () => {
-                audioElement.removeEventListener(
-                    "loadedmetadata",
-                    handleLoadedMetadata
-                );
                 audioElement.removeEventListener("timeupdate", handleTimeUpdate);
-                URL.revokeObjectURL(audioUrl);
             };
         }
     }, [url]);
@@ -60,6 +48,14 @@ export const AudioMessage = ({url}:Props) => {
         const seconds = Math.floor(durationInSeconds % 60);
         const formattedMinutes = String(minutes).padStart(2, '0');
         const formattedSeconds = String(seconds).padStart(2, '0');
+        return `${formattedMinutes}:${formattedSeconds}`;
+    }
+    const formatDuration = (duration: string) =>{
+        const milliseconds = parseInt(duration);
+        const seconds = Math.floor((milliseconds / 1000) % 60);
+        const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
+        const formattedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
         return `${formattedMinutes}:${formattedSeconds}`;
     }
     const playAudio = () => {
@@ -74,15 +70,21 @@ export const AudioMessage = ({url}:Props) => {
         }
     };
     return(
-        <div className={s.wrapperAudioMessage}>
+        <>
+            <div className={s.wrapperAudioMessage}>
             <audio className={s.audioMessage} ref={audioRef}></audio>
             {/*<audio className={s.audioMessage} src={"https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3"} ref={audioRef}></audio>*/}
             <div className={s.controlPanel}>
                 <button className={s.playBtn} onClick={playAudio}>{isPlaying ? 'Pause' : 'Play'}</button>
                 <div className={s.audioLine}>werwer</div>
-                <div className={s.time}>{formatTime(currentTime)} / {formatTime(audioDuration)}</div>
+                <div className={s.time}>{formatTime(currentTime)} / {formatDuration(duration)}</div>
                 <div className="lod_player"></div>
             </div>
         </div>
+            <div>
+                <p>Последняя добавленная запись в буфере обмена: {clipboardContent}</p>
+            </div>
+        </>
+
     )
 }

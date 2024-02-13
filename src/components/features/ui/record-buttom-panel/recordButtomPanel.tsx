@@ -45,6 +45,7 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
     const startIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const volumeIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const [recordingTime, setRecordingTime] = useState<number>(0)
+    const recordingTimeRef = useRef(0);
 
     const [volumeLevel, setVolumeLevel] = useState(0);
 
@@ -99,8 +100,10 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                             const reader = new FileReader();
                             reader.onloadend = function () {
                                 if (reader.result) {
-                                    localStorage.setItem('myAudio', JSON.stringify(reader.result));
-                                    console.log('Видео сохранено в локальное хранилище');
+                                    // setBlobFileData(reader.result)
+                                    const audioData = {file: reader.result, time: recordingTimeRef.current}
+                                    localStorage.setItem('myAudio', JSON.stringify(audioData));
+                                    // console.log('Видео сохранено в локальное хранилище');
                                 }
                             };
                             reader.readAsDataURL(audioBlob);
@@ -119,6 +122,7 @@ export const RecordBottomPanel = ({setIsAudioRecording, setIsRecording, videoRef
                     const startTime = setInterval(() => {
                         const currentTime = Date.now();
                         const elapsedTime = Math.floor((currentTime - time)); // Время в секундах
+                        recordingTimeRef.current = elapsedTime;
                         // Сохраняем время записи в состояние
                         setRecordingTime(elapsedTime);
                     }, 100);

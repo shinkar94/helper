@@ -16,7 +16,7 @@ export const VideoRecorder = () => {
     const [isAudioRecording, setIsAudioRecording] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
-    const [audioUrl, setAudioUrl] = useState<string[] | []>([]);
+    const [dataAudio, setDataAudio] = useState<Array<{file: string, time: string }> | []>([]);
 
     useEffect(() => {
         const checkIsMobile = () => {
@@ -34,10 +34,10 @@ export const VideoRecorder = () => {
     useEffect(() => {
         const getAudio = localStorage.getItem('myAudio');
         const audio = getAudio ? JSON.parse(getAudio) : null;
-        setAudioUrl([audio]);
+        setDataAudio([{file: audio.file, time: audio.time}]);
     }, []);
 
-    console.log(audioUrl)
+    console.log(dataAudio)
 
     return (
         <div className={s.wrapperRecorder}>
@@ -70,7 +70,7 @@ export const VideoRecorder = () => {
                 videoRef={videoRef}
                 setPercentage={setPercentage}/>
 
-            {audioUrl.length > 0 && audioUrl.map((url, index) => <AudioMessage key={index} url={url}/>)}
+            {dataAudio.length > 0 && dataAudio.map((data, index) => <AudioMessage key={index} url={data.file} duration={data.time}/>)}
 
         </div>
     );
