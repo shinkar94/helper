@@ -1,5 +1,6 @@
 import s from "@/components/features/ui/video-recorder/videoRecorder.module.scss";
 import React, {useEffect, useRef, useState} from "react";
+import {AudioLine} from "@/components/entities/audio-line";
 
 type Props = {
     url: string
@@ -43,6 +44,7 @@ export const AudioMessage = ({url, duration}:Props) => {
             };
         }
     }, [url]);
+
     function formatTime(durationInSeconds: number) {
         const minutes = Math.floor(durationInSeconds / 60);
         const seconds = Math.floor(durationInSeconds % 60);
@@ -73,10 +75,9 @@ export const AudioMessage = ({url, duration}:Props) => {
         <>
             <div className={s.wrapperAudioMessage}>
             <audio className={s.audioMessage} ref={audioRef}></audio>
-            {/*<audio className={s.audioMessage} src={"https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3"} ref={audioRef}></audio>*/}
             <div className={s.controlPanel}>
                 <button className={s.playBtn} onClick={playAudio}>{isPlaying ? 'Pause' : 'Play'}</button>
-                <div className={s.audioLine}>werwer</div>
+                <div className={s.audioLine}><AudioLine duration={duration} /></div>
                 <div className={s.time}>{formatTime(currentTime)} / {formatDuration(duration)}</div>
                 <div className="lod_player"></div>
             </div>
